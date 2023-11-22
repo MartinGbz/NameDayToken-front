@@ -14,18 +14,6 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
-    fontFamily: {
-      app: [
-        "-apple-system",
-        "system-ui",
-        "BlinkMacSystemFont",
-        "'Segoe UI'",
-        "Roboto",
-        "Ubuntu",
-        "'Helvetica Neue'",
-        "sans-serif",
-      ],
-    },
   },
   plugins: [],
 };
