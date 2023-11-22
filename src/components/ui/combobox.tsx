@@ -17,22 +17,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Address } from "wagmi";
+
+import tokens from "@/tokens.json";
 
 interface ComboboxProps {
   defaultValue: string;
   defaultPlaceholder: string;
-  frameworks: { value: string; label: string }[];
-  onChange?: (value: string) => void;
+  onChange?: (value: Address | undefined) => void;
 }
 
 export function Combobox({
   defaultValue,
   defaultPlaceholder,
-  frameworks,
   onChange,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState<Address | undefined>();
 
   React.useEffect(() => {
     onChange?.(value);
@@ -47,7 +48,9 @@ export function Combobox({
           aria-expanded={open}
           className="w-[200px] justify-between">
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+            ? tokens.find(
+                (tokens) => tokens.value.toLowerCase() === value.toLowerCase()
+              )?.label
             : defaultValue}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -55,23 +58,26 @@ export function Combobox({
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder={defaultPlaceholder} />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandEmpty>No tokens found.</CommandEmpty>
           <CommandGroup>
-            {frameworks.map((framework) => (
+            {tokens.map((tokens) => (
               <CommandItem
-                key={framework.value}
-                value={framework.value}
+                key={tokens.value}
+                value={tokens.value}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
+                  const newValue: Address = currentValue.startsWith("0x")
+                    ? (currentValue as Address)
+                    : `0x${currentValue}`;
+                  setValue(newValue === value ? undefined : newValue);
                   setOpen(false);
                 }}>
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0"
+                    value === tokens.value ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {framework.label}
+                {tokens.label}
               </CommandItem>
             ))}
           </CommandGroup>

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "Mint your NameDayToken",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
