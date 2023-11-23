@@ -19,13 +19,16 @@ import {
 } from "@/components/ui/popover";
 import { Address } from "wagmi";
 
-import tokens from "@/tokens.json";
+import tokensJSON from "@/tokens.json";
+import { Contract, TokenOption } from "@/types";
 
 interface ComboboxProps {
   defaultValue: string;
   defaultPlaceholder: string;
-  onChange?: (value: Address | undefined) => void;
+  onChange?: (value: Contract | undefined) => void;
 }
+
+const tokens: TokenOption[] = tokensJSON as TokenOption[];
 
 export function Combobox({
   defaultValue,
@@ -33,7 +36,7 @@ export function Combobox({
   onChange,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<Address | undefined>();
+  const [value, setValue] = React.useState<Contract | undefined>();
 
   React.useEffect(() => {
     onChange?.(value);
@@ -49,7 +52,9 @@ export function Combobox({
           className="w-[200px] justify-between">
           {value
             ? tokens.find(
-                (tokens) => tokens.value.toLowerCase() === value.toLowerCase()
+                (tokens) =>
+                  tokens.value.address.toLowerCase() ===
+                  value.address.toLowerCase()
               )?.label
             : defaultValue}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -60,24 +65,29 @@ export function Combobox({
           <CommandInput placeholder={defaultPlaceholder} />
           <CommandEmpty>No tokens found.</CommandEmpty>
           <CommandGroup>
-            {tokens.map((tokens) => (
+            {tokens.map((token) => (
               <CommandItem
-                key={tokens.value}
-                value={tokens.value}
+                key={token.value.address}
+                value={token.value.address}
                 onSelect={(currentValue) => {
                   const newValue: Address = currentValue.startsWith("0x")
                     ? (currentValue as Address)
                     : `0x${currentValue}`;
-                  setValue(newValue === value ? undefined : newValue);
+                  const a = token.value;
+                  setValue(
+                    newValue === value?.address ? undefined : token.value
+                  );
                   setOpen(false);
                 }}>
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === tokens.value ? "opacity-100" : "opacity-0"
+                    value?.address === token.value.address
+                      ? "opacity-100"
+                      : "opacity-0"
                   )}
                 />
-                {tokens.label}
+                {token.label}
               </CommandItem>
             ))}
           </CommandGroup>

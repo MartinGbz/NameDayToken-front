@@ -2,13 +2,21 @@
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
+import { configureChains, createConfig, sepolia, WagmiConfig } from "wagmi";
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  base,
+  zora,
+  optimismGoerli,
+} from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   const { chains, publicClient } = configureChains(
-    [mainnet, polygon, optimism, arbitrum, base, zora],
+    [mainnet, polygon, optimism, arbitrum, base, zora, sepolia],
     [publicProvider()]
   );
 

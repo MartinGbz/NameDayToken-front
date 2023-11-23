@@ -21,7 +21,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <div className="h-screen w-screen flex flex-col justify-between bg-slate-200 text-black">
+          <div className="h-screen w-screen flex flex-col justify-between bg-white text-black">
             <Header />
             {children}
             <Footer />
