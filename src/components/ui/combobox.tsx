@@ -73,7 +73,6 @@ export function Combobox({
                   const newValue: Address = currentValue.startsWith("0x")
                     ? (currentValue as Address)
                     : `0x${currentValue}`;
-                  const a = token.value;
                   setValue(
                     newValue === value?.address ? undefined : token.value
                   );

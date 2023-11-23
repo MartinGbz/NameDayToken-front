@@ -2,23 +2,29 @@
 
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import {
-  Address,
-  useAccount,
-  useBalance,
-  useContractRead,
-  useNetwork,
-  useToken,
-} from "wagmi";
+import { useAccount, useBalance, useContractRead, useToken } from "wagmi";
 import { Progress } from "./ui/progress";
 import { Contract } from "@/types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+
+import { BiCoin } from "react-icons/bi";
 
 interface DashboardProps {
   token: Contract;
   chainId: number;
 }
 
-const DAY_IN_SECONDS = 86400;
+const dayInSecond = 86400;
+const yearInSecond = 365 * dayInSecond;
+
+const DAY_IN_SECONDS = BigInt(dayInSecond);
+const YEAR_IN_SECONDS = BigInt(yearInSecond);
 
 export const Dashboard = ({ token, chainId }: DashboardProps) => {
   const { address, isConnected } = useAccount();
@@ -51,239 +57,153 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
     functionName: "nameDayTimestamp",
   });
 
-  // const [tokenTimestamp, setTokenTimestamp] = useState<number | undefined>();
-  const [progressionDate, setProgressionDate] = useState<number | undefined>();
-
-  const baseYear = 2023;
-
-  // function _isRightDay() {
-  //   const tokenTimestamp: bigint = BigInt(1700822098);
-  //   const now = BigInt(Math.floor(Date.now() / 1000));
-  //   const yearsPassed = (now - tokenTimestamp) / BigInt(365 * DAY_IN_SECONDS);
-  //   // if not in date => nextDayTimestamp=_nameDayTimestamp
-  //   // if in date => nextDayTimestamp=_nameDayTimestamp+yearsPassed*YEAR_IN_SECONDS
-  //   let nextDayTimestamp =
-  //     tokenTimestamp + yearsPassed * BigInt(365 * DAY_IN_SECONDS);
-
-  //   const currentYear = BigInt(baseYear) + yearsPassed;
-
-  //   // add leap days
-  //   // doesn't take into account the current year because it's not finished yet
-  //   for (let i = baseYear; i < currentYear; i++) {
-  //     if (isLeap(i)) {
-  //       nextDayTimestamp += BigInt(DAY_IN_SECONDS);
-  //     }
-  //   }
-
-  //   let percentage;
-  //   if (
-  //     now >= nextDayTimestamp &&
-  //     now < nextDayTimestamp + BigInt(DAY_IN_SECONDS)
-  //   ) {
-  //     percentage = 0;
-  //   } else if(now  nextDayTimestamp) {
-  //     percentage = 100;
-  //   } else {
-  //     percentage = 0;
-  //   }
-
-  //   // return (
-  //   // now >= nextDayTimestamp &&
-  //   // now < nextDayTimestamp + BigInt(DAY_IN_SECONDS)
-  //   // );
-  // }
-
-  // function isLeap(year: number) {
-  //   if (year % 4 != 0) {
-  //     return false;
-  //   } else if (year % 100 != 0) {
-  //     return true;
-  //   } else if (year % 400 == 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  const [percentageCompleted, setPercentageCompleted] = useState<number>();
+  const [daysLeft, setDaysLeft] = useState<number | undefined>();
 
   useEffect(() => {
-    console.log("useContractRead");
-    // console.log(tokenTimestampData, tokenTimestampError, tokenTimestampLoading);
-    if (tokenTimestampData) {
-      const tokenTimestamp: bigint = tokenTimestampData as unknown as bigint;
-      // const tokenTimestamp: bigint = BigInt(1762770898);
-      // const tokenTimestamp: bigint = BigInt(1700476498);
-      // const tokenTimestamp: bigint = BigInt(1700908498);
-      // console.log(tokenTimestampData[0]);
-      // setTokenTimestamp(tokenTimestampData);
-      // const now = BigInt(Math.floor(Date.now() / 1000));
-      const now = BigInt(1700735698);
-      console.log(now);
-      console.log(tokenTimestamp);
-      console.log(tokenTimestamp - now);
+    const baseYear = new Date(Date.now()).getFullYear();
+    const isBaseYearLeap = isLeap(baseYear);
 
-      // const currentYear = now / BigInt(365 * DAY_IN_SECONDS);
-      // const tokenStartYear = tokenTimestamp / BigInt(365 * DAY_IN_SECONDS);
-      // console.log(currentYear);
-      // console.log(tokenStartYear);
+    function isLeap(year: number) {
+      if (year % 4 != 0) {
+        return false;
+      } else if (year % 100 != 0) {
+        return true;
+      } else if (year % 400 == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
 
-      // let newTimestamp = tokenTimestamp;
-      // if (currentYear > tokenStartYear) {
-      //   const diff = currentYear - tokenStartYear;
-      //   newTimestamp = tokenTimestamp + diff * BigInt(DAY_IN_SECONDS);
-      // }
+    function addLeapDays(yearsToAdd: bigint, nextDayTimestamp: bigint) {
+      let nextDayTimestampWithLeap = nextDayTimestamp;
+      for (let i = baseYear; i < yearsToAdd; i++) {
+        if (isLeap(i)) {
+          nextDayTimestampWithLeap += DAY_IN_SECONDS;
+        }
+      }
+      return nextDayTimestampWithLeap;
+    }
 
+    function getYearProgression(tokenTimestampData: bigint) {
+      const tokenTimestamp: bigint = tokenTimestampData;
+      const now = BigInt(Math.floor(Date.now() / 1000));
+      console.log("now", now);
+      console.log("tokenTimestamp", tokenTimestamp);
       let newTimestamp = tokenTimestamp;
-      let percentage: number | undefined;
 
-      if (tokenTimestamp + BigInt(DAY_IN_SECONDS) < now) {
+      if (tokenTimestamp + DAY_IN_SECONDS < now) {
         // if we are in the future: we compute the correct timestamp of our current year (or "cycle")
-        // const diff = now / tokenTimestamp;
-        // console.log({ diff });
-        // newTimestamp = tokenTimestamp + diff * BigInt(365 * DAY_IN_SECONDS);
-        const yearsPassed =
-          (now - tokenTimestamp) / BigInt(365 * DAY_IN_SECONDS);
-        console.log({ yearsPassed });
+        const yearsPassed = (now - tokenTimestamp) / YEAR_IN_SECONDS;
         // + 1 because we want the next year
         newTimestamp =
-          tokenTimestamp +
-          (yearsPassed + BigInt(1)) * BigInt(365 * DAY_IN_SECONDS);
-        console.log({ newTimestamp });
+          tokenTimestamp + (yearsPassed + BigInt(1)) * YEAR_IN_SECONDS;
+        newTimestamp = addLeapDays(yearsPassed + BigInt(1), newTimestamp);
       } else if (now < tokenTimestamp) {
         // if we are in the past: we compute the correct timestamp of our current year (or "cycle")
-        const missingYears =
-          (tokenTimestamp - now) / BigInt(365 * DAY_IN_SECONDS);
+        const missingYears = (tokenTimestamp - now) / YEAR_IN_SECONDS;
         if (missingYears >= 1) {
-          console.log({ missingYears });
           return;
         }
         newTimestamp = tokenTimestamp;
       } else if (
         now >= tokenTimestamp &&
-        now < tokenTimestamp + BigInt(DAY_IN_SECONDS)
+        now < tokenTimestamp + DAY_IN_SECONDS
       ) {
-        console.log("IN DATE");
-        percentage = -1;
-        setProgressionDate(percentage);
+        // if we are in the right day: we set directly a -1
+        setPercentageCompleted(-1);
         return;
       } else {
-        console.log("impossible");
         return;
       }
 
-      console.log({ now });
-      console.log({ newTimestamp });
+      const previousTimestamp = newTimestamp - YEAR_IN_SECONDS;
+      const sliceYearCovered = now - previousTimestamp;
+      // if the current year is a leap year, we add a day to the total number of days (otherwise we would have 365 days instead of 366)
+      let newYearInSecond = yearInSecond;
+      if (isBaseYearLeap) {
+        newYearInSecond += dayInSecond;
+      }
+      const progress = Number(sliceYearCovered) / newYearInSecond;
+      const percentage = progress * 100;
+      setPercentageCompleted(percentage);
 
-      const previousTimestamp = newTimestamp - BigInt(365 * DAY_IN_SECONDS);
-
-      const ab = now - previousTimestamp;
-
-      const progress = Number(ab) / (365 * DAY_IN_SECONDS);
-
-      percentage = progress * 100;
-
-      console.log({ previousTimestamp });
-      console.log({ ab });
-      console.log({ progress });
-      console.log({ percentage });
-
-      setProgressionDate(percentage);
-
-      // if (now < newTimestamp) {
-      //   console.log("BEFORE DATE");
-      //   // const diff = newTimestamp / now + BigInt(1); // without +1 the multiplication will be of 1 if there is 1 year of difference
-      //   // console.log({ diff });
-      //   // percentage = (newTimestamp - now) / BigInt(365 * DAY_IN_SECONDS);
-      //   // const a = Number(newTimestamp) - Number(now);
-      //   // const b = 365 * DAY_IN_SECONDS;
-      //   // const c = a / b;
-      //   // const d = c * 100;
-      //   // console.log({ a });
-      //   // console.log({ b });
-      //   // console.log({ c });
-      //   // console.log({ d });
-      //   // const prevTimestamp = tokenTimestamp - diff * BigInt(365 * DAY_IN_SECONDS);
-      //   const prevTimestamp = tokenTimestamp;
-      //   const a =
-      //     Number(now - prevTimestamp) / Number(newTimestamp - prevTimestamp);
-      //   const b = a * 100;
-      //   console.log({ a });
-      //   console.log({ b });
-      //   percentage = b;
-      // } else if (
-      //   newTimestamp - now < 0 &&
-      //   newTimestamp - now > -BigInt(DAY_IN_SECONDS)
-      // ) {
-      //   console.log("IN DATE");
-      //   percentage = 0;
-      // } else {
-      //   console.log("impossible");
-      // }
-
-      // console.log(newTimestamp);
-      // console.log(percentage);
-      setProgressionDate(percentage);
+      const sliceYearMising = newTimestamp - now;
+      const daysLeft = sliceYearMising / DAY_IN_SECONDS;
+      setDaysLeft(Number(daysLeft));
     }
-    // console.log(Math.floor(Date.now() / 1000));
+
+    if (tokenTimestampData) {
+      getYearProgression(tokenTimestampData as unknown as bigint);
+    }
   }, [tokenTimestampData, tokenTimestampError, tokenTimestampLoading]);
 
-  useEffect(() => {
-    // console.log("useToken");
-    // console.log(tokenData, isTokenError, isTokenLoading);
-  }, [tokenData, isTokenError, isTokenLoading]);
-
-  useEffect(() => {
-    // console.log("useBalance");
-    // console.log(tokenBalanceData);
-    // console.log(isError);
-    // console.log(isLoading);
-  }, [tokenBalanceData, isError, isLoading]);
-
-  useEffect(() => {
-    // console.log("useAccount");
-    // console.log(address, isConnected);
-  }, [address, isConnected]);
-
   return (
-    <div className="grid grid-cols-2">
-      <div className="flex flex-col space-y-4">
-        <div className="font-medium md:text-xl">
-          {" "}
-          My Balance:{" "}
-          <span className="font-semibold text-green-500">
-            {tokenBalanceData?.formatted.substring(0, 6)}
-          </span>
-          <span className="font-semibold">
-            {" $" + tokenBalanceData?.symbol}
-          </span>
-        </div>
-        <div className="font-medium md:text-xl">
-          {" "}
-          Total supply:{" "}
-          <span className="font-semibold">
-            {tokenData?.totalSupply.formatted}
-          </span>
-        </div>
-        {progressionDate && progressionDate > 0 && (
-          <div className="font-medium md:text-xl space-y-2">
+    <div className="grid grid-cols-2 grid-row-2 gap-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>My Profile</CardTitle>
+          <CardDescription>Your profile infos</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="font-medium md:text-lg">
             {" "}
-            Next day: <span className="text-red-500 font-semibold">{290}j</span>
-            <Progress value={progressionDate} />
+            My Balance:{" "}
+            <span className="text-green-500">
+              {tokenBalanceData?.formatted.substring(0, 6)}
+            </span>
+            <span>{" $" + tokenBalanceData?.symbol}</span>
+          </div>
+        </CardContent>
+      </Card>
+      <div className="relative flex items-center justify-center flex-col">
+        {percentageCompleted == -1 && (
+          <div className="absolute top-0 flex items-center space-x-1 p-1 border-2 border-red-400 rounded">
+            <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse"></div>
+            <span className="text-red-400 font-semibold">Minting live</span>
           </div>
         )}
-        {progressionDate && progressionDate == -1 && (
-          <div className="font-medium md:text-xl space-y-2">
+        <Button
+          disabled={percentageCompleted != -1}
+          className="md:w-52 h-16 space-x-1">
+          {" "}
+          <BiCoin className="text-lg mr-1" />
+          Mint{" "}
+        </Button>
+      </div>
+      <Card className="col-span-2">
+        <CardHeader>
+          <CardTitle>Token infos</CardTitle>
+          <CardDescription>Token stats</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {" "}
+          <div className="font-medium md:text-lg">
             {" "}
-            Next day:
-            <span className="text-green-500 font-semibold"> In Day</span>
-            <Progress value={100} />
+            Total supply:{" "}
+            <span>
+              {tokenData?.totalSupply.formatted}{" "}
+              {" $" + tokenBalanceData?.symbol}
+            </span>
           </div>
-        )}
-      </div>
-      <div className="flex flex-col items-end">
-        <div className="flex flex-col w-fit space-y-4 items-end">
-          <Button> Mint </Button>
-        </div>
-      </div>
+          {percentageCompleted && daysLeft && percentageCompleted > 0 && (
+            <div className="font-medium md:text-lg space-y-2">
+              {" "}
+              Next mint: <span className="text-red-500">{daysLeft} days</span>
+              <Progress value={percentageCompleted} />
+            </div>
+          )}
+          {percentageCompleted && percentageCompleted == -1 && (
+            <div className="font-medium md:text-lg space-y-2">
+              {" "}
+              Next mint:
+              <span className="text-green-500"> in-day</span>
+              <Progress value={100} />
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
