@@ -15,7 +15,7 @@ export const Footer = () => {
       <a href="https://twitter.com/0xMartinGbz">
         <div className="flex items-center">
           <FaXTwitter className="text-black dark:text-white w-4 h-4 md:w-5 md:h-5 mr-1" />
-          <p className="text-xs md:text-base"> @0xMartinGbz </p>
+          <p className="text-xs md:text-base"> 0xMartinGbz </p>
         </div>
       </a>
       <a href="https://hey.xyz/u/martingbz">
@@ -43,7 +43,7 @@ export const Footer = () => {
             alt={"github icon"}
             className="w-4 h-4 md:w-6 md:h-6 mr-2"
           />
-          <p className="text-xs md:text-base"> @martingbz </p>
+          <p className="text-xs md:text-base"> martingbz </p>
         </div>
       </a>
       <IoLogoGithub className="text-black dark:text-white w-4 h-4 md:w-7 md:h-7" />

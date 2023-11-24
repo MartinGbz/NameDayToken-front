@@ -89,8 +89,6 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
     function getYearProgression(tokenTimestampData: bigint) {
       const tokenTimestamp: bigint = tokenTimestampData;
       const now = BigInt(Math.floor(Date.now() / 1000));
-      console.log("now", now);
-      console.log("tokenTimestamp", tokenTimestamp);
       let newTimestamp = tokenTimestamp;
 
       if (tokenTimestamp + DAY_IN_SECONDS < now) {
@@ -148,8 +146,7 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
         </CardHeader>
         <CardContent>
           <div className="font-medium md:text-lg">
-            {" "}
-            My Balance:{" "}
+            <span>My Balance: </span>
             <span className="text-green-500">
               {tokenBalanceData?.formatted.substring(0, 6)}
             </span>
@@ -178,10 +175,8 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
           <CardDescription>Token stats</CardDescription>
         </CardHeader>
         <CardContent>
-          {" "}
           <div className="font-medium md:text-lg">
-            {" "}
-            Total supply:{" "}
+            <span>Total supply: </span>
             <span>
               {tokenData?.totalSupply.formatted}{" "}
               {" $" + tokenBalanceData?.symbol}
@@ -189,15 +184,14 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
           </div>
           {percentageCompleted && daysLeft && percentageCompleted > 0 && (
             <div className="font-medium md:text-lg space-y-2">
-              {" "}
-              Next mint: <span className="text-red-500">{daysLeft} days</span>
+              <span>Next mint: </span>
+              <span className="text-red-500">{daysLeft} days</span>
               <Progress value={percentageCompleted} />
             </div>
           )}
           {percentageCompleted && percentageCompleted == -1 && (
             <div className="font-medium md:text-lg space-y-2">
-              {" "}
-              Next mint:
+              <span>Next mint: </span>
               <span className="text-green-500"> in-day</span>
               <Progress value={100} />
             </div>

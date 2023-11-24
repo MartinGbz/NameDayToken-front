@@ -23,14 +23,14 @@ import tokensJSON from "@/tokens.json";
 import { Contract, TokenOption } from "@/types";
 
 interface ComboboxProps {
-  defaultValue: string;
+  defaultValue: TokenOption;
   defaultPlaceholder: string;
   onChange?: (value: Contract | undefined) => void;
 }
 
 const tokens: TokenOption[] = tokensJSON as TokenOption[];
 
-export function Combobox({
+export function TokensCombobox({
   defaultValue,
   defaultPlaceholder,
   onChange,
@@ -56,7 +56,7 @@ export function Combobox({
                   tokens.value.address.toLowerCase() ===
                   value.address.toLowerCase()
               )?.label
-            : defaultValue}
+            : defaultValue.label}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -81,7 +81,8 @@ export function Combobox({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value?.address === token.value.address
+                    value?.address === token.value.address ||
+                      defaultValue.value.address === token.value.address
                       ? "opacity-100"
                       : "opacity-0"
                   )}
