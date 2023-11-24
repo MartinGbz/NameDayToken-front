@@ -49,7 +49,7 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between">
+          className="w-[200px] justify-between dark:text-white">
           {value
             ? tokens.find(
                 (tokens) =>
