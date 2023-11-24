@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "./theme-provider";
 import { WalletProvider } from "./wallet-provider";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
