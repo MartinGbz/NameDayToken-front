@@ -1,25 +1,10 @@
 "use client";
 
 import "@rainbow-me/rainbowkit/styles.css";
-import {
-  darkTheme,
-  getDefaultWallets,
-  lightTheme,
-  RainbowKitProvider,
-} from "@rainbow-me/rainbowkit";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, sepolia, WagmiConfig } from "wagmi";
-import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-  zora,
-  optimismGoerli,
-} from "wagmi/chains";
+import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-import { ThemeProvider, useTheme } from "next-themes";
-import { useEffect } from "react";
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const { chains, publicClient } = configureChains(
@@ -39,35 +24,11 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     publicClient,
   });
 
-  const { theme } = useTheme();
-
-  useEffect(() => {
-    console.log(theme);
-  }, [theme]);
-
-  console.log("feefveljvknm");
+  console.log("AAA");
 
   return (
-    // <ThemeProvider
-    //   attribute="class"
-    //   defaultTheme="light"
-    //   enableSystem
-    //   disableTransitionOnChange>
     <WagmiConfig config={wagmiConfig}>
-      {/* <ThemeProvider
-        attribute="class"
-        defaultTheme="light"
-        enableSystem
-        disableTransitionOnChange> */}
-      <RainbowKitProvider
-        chains={chains}
-        // theme={theme == "light" ? lightTheme() : darkTheme()}>
-        // theme={lightTheme()}
-      >
-        {children}
-      </RainbowKitProvider>
-      {/* </ThemeProvider> */}
+      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
     </WagmiConfig>
-    // </ThemeProvider>
   );
 };
