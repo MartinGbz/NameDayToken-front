@@ -9,7 +9,7 @@ const Header = () => {
       <h1 className="font-bold md:text-3xl"> Name Day Token 📅 </h1>
       <div className="flex space-x-4">
         <ConnectButton />
-        <ThemeModeToggle />
+        {/* <ThemeModeToggle /> */}
       </div>
     </div>
   );

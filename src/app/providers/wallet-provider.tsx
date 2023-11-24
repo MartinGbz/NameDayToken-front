@@ -24,8 +24,6 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     publicClient,
   });
 
-  console.log("AAA");
-
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>

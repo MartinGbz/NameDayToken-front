@@ -20,16 +20,15 @@ export const Footer = () => {
       </a>
       <a href="https://hey.xyz/u/martingbz">
         <div className="flex items-center">
-          {theme === "light" && (
+          {theme == "dark" ? (
             <Image
-              src={lensIconBlack}
+              src={lensIconWhite}
               alt={"github icon"}
               className="w-7 h-7 md:w-9 md:h-9"
             />
-          )}
-          {theme !== "light" && (
+          ) : (
             <Image
-              src={lensIconWhite}
+              src={lensIconBlack}
               alt={"github icon"}
               className="w-7 h-7 md:w-9 md:h-9"
             />
