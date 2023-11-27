@@ -61,53 +61,168 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
   const [daysLeft, setDaysLeft] = useState<number | undefined>();
 
   useEffect(() => {
-    const baseYear = new Date(Date.now()).getFullYear();
-    const isBaseYearLeap = isLeap(baseYear);
+    // const baseYear = new Date(Date.now()).getFullYear();
+    // const isBaseYearLeap = isLeap(baseYear);
 
-    function isLeap(year: number) {
-      if (year % 4 != 0) {
-        return false;
-      } else if (year % 100 != 0) {
-        return true;
-      } else if (year % 400 == 0) {
-        return true;
-      } else {
-        return false;
-      }
-    }
+    // function isLeap(year: number) {
+    //   if (year % 4 != 0) {
+    //     return false;
+    //   } else if (year % 100 != 0) {
+    //     return true;
+    //   } else if (year % 400 == 0) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
 
-    function addLeapDays(yearsToAdd: bigint, nextDayTimestamp: bigint) {
-      let nextDayTimestampWithLeap = nextDayTimestamp;
-      for (let i = baseYear; i < yearsToAdd; i++) {
-        if (isLeap(i)) {
-          nextDayTimestampWithLeap += DAY_IN_SECONDS;
-        }
-      }
-      return nextDayTimestampWithLeap;
-    }
+    // function addLeapDays(yearsToAdd: bigint, nextDayTimestamp: bigint) {
+    //   let nextDayTimestampWithLeap = nextDayTimestamp;
+    //   for (let i = baseYear; i < yearsToAdd; i++) {
+    //     if (isLeap(i)) {
+    //       nextDayTimestampWithLeap += DAY_IN_SECONDS;
+    //     }
+    //   }
+    //   return nextDayTimestampWithLeap;
+    // }
 
-    function getYearProgression(tokenTimestampData: bigint) {
-      const tokenTimestamp: bigint = tokenTimestampData;
-      const now = BigInt(Math.floor(Date.now() / 1000));
-      let newTimestamp = tokenTimestamp;
+    // function getYearProgression(tokenTimestampData: bigint) {
+    //   const tokenTimestamp: bigint = tokenTimestampData;
+    //   const now = BigInt(Math.floor(Date.now() / 1000));
+    //   let newTimestamp = tokenTimestamp;
 
-      if (tokenTimestamp + DAY_IN_SECONDS < now) {
-        // if we are in the future: we compute the correct timestamp of our current year (or "cycle")
-        const yearsPassed = (now - tokenTimestamp) / YEAR_IN_SECONDS;
-        // + 1 because we want the next year
-        newTimestamp =
-          tokenTimestamp + (yearsPassed + BigInt(1)) * YEAR_IN_SECONDS;
-        newTimestamp = addLeapDays(yearsPassed + BigInt(1), newTimestamp);
-      } else if (now < tokenTimestamp) {
+    //   if (tokenTimestamp + DAY_IN_SECONDS < now) {
+    //     // if we are in the future: we compute the correct timestamp of our current year (or "cycle")
+    //     const yearsPassed = (now - tokenTimestamp) / YEAR_IN_SECONDS;
+    //     // + 1 because we want the next year
+    //     newTimestamp =
+    //       tokenTimestamp + (yearsPassed + BigInt(1)) * YEAR_IN_SECONDS;
+    //     newTimestamp = addLeapDays(yearsPassed + BigInt(1), newTimestamp);
+    //   } else if (now < tokenTimestamp) {
+    //     // if we are in the past: we compute the correct timestamp of our current year (or "cycle")
+    //     const missingYears = (tokenTimestamp - now) / YEAR_IN_SECONDS;
+    //     if (missingYears >= 1) {
+    //       return;
+    //     }
+    //     newTimestamp = tokenTimestamp;
+    //   } else if (
+    //     now >= tokenTimestamp &&
+    //     now < tokenTimestamp + DAY_IN_SECONDS
+    //   ) {
+    //     // if we are in the right day: we set directly a -1
+    //     setPercentageCompleted(-1);
+    //     return;
+    //   } else {
+    //     return;
+    //   }
+
+    //   const previousTimestamp = newTimestamp - YEAR_IN_SECONDS;
+    //   const sliceYearCovered = now - previousTimestamp;
+    //   // if the current year is a leap year, we add a day to the total number of days (otherwise we would have 365 days instead of 366)
+    //   let newYearInSecond = yearInSecond;
+    //   if (isBaseYearLeap) {
+    //     newYearInSecond += dayInSecond;
+    //   }
+    //   const progress = Number(sliceYearCovered) / newYearInSecond;
+    //   const percentage = progress * 100;
+    //   setPercentageCompleted(percentage);
+
+    //   const sliceYearMising = newTimestamp - now;
+    //   const daysLeft = sliceYearMising / DAY_IN_SECONDS;
+    //   setDaysLeft(Number(daysLeft));
+    // }
+
+    function getYearProgression(nameDayTimestamp: bigint) {
+      console.log({ nameDayTimestamp });
+      console.log(Number(nameDayTimestamp));
+      console.log(Number(nameDayTimestamp) * 1000);
+      console.log(new Date(Number(nameDayTimestamp) * 1000));
+      // const date = BigInt(nameDayTimestamp * BigInt(1000)).toString();
+      // console.log(date);
+      const nameDayDate = new Date(Number(nameDayTimestamp) * 1000);
+      console.log(nameDayDate);
+      const currentTimestamp = BigInt(new Date().getTime());
+      console.log({ currentTimestamp });
+      let nextNameDayTimestamp: bigint;
+      let previousTimestamp: bigint;
+      if (nameDayTimestamp + DAY_IN_SECONDS < currentTimestamp) {
+        nextNameDayTimestamp = BigInt(
+          new Date(
+            new Date().getFullYear() + 1,
+            nameDayDate.getMonth(),
+            nameDayDate.getDate(),
+            nameDayDate.getHours(),
+            nameDayDate.getMinutes(),
+            nameDayDate.getSeconds(),
+            nameDayDate.getMilliseconds()
+          ).getTime()
+        );
+
+        // console.log(nameDayDate.getDate());
+        // console.log(nameDayDate.getUTCDay());
+
+        console.log(nameDayDate.getMonth());
+        console.log(nameDayDate.getDate());
+        console.log(nameDayDate.getHours());
+        console.log(nameDayDate.getMinutes());
+        console.log(nameDayDate.getSeconds());
+        console.log(nameDayDate.getMilliseconds());
+
+        console.log(
+          new Date(
+            new Date().getFullYear() + 1,
+            nameDayDate.getMonth(),
+            nameDayDate.getDate(),
+            nameDayDate.getHours(),
+            nameDayDate.getMinutes(),
+            nameDayDate.getSeconds(),
+            nameDayDate.getMilliseconds()
+          )
+        );
+        console.log(
+          new Date(
+            new Date().getFullYear(),
+            nameDayDate.getMonth(),
+            nameDayDate.getDate(),
+            nameDayDate.getHours(),
+            nameDayDate.getMinutes(),
+            nameDayDate.getSeconds(),
+            nameDayDate.getMilliseconds()
+          )
+        );
+        // console.log({ nextNameDayTimestamp });
+
+        previousTimestamp = BigInt(
+          new Date(
+            new Date().getFullYear(),
+            nameDayDate.getMonth(),
+            nameDayDate.getDate(),
+            nameDayDate.getHours(),
+            nameDayDate.getMinutes(),
+            nameDayDate.getSeconds()
+          ).getTime()
+        );
+      } else if (currentTimestamp < nameDayTimestamp) {
         // if we are in the past: we compute the correct timestamp of our current year (or "cycle")
-        const missingYears = (tokenTimestamp - now) / YEAR_IN_SECONDS;
+        const missingYears =
+          (nameDayTimestamp - currentTimestamp) / YEAR_IN_SECONDS;
         if (missingYears >= 1) {
           return;
         }
-        newTimestamp = tokenTimestamp;
+        nextNameDayTimestamp = nameDayTimestamp;
+        previousTimestamp = BigInt(
+          new Date(
+            new Date().getFullYear() - 1,
+            nameDayDate.getMonth(),
+            nameDayDate.getDate(),
+            nameDayDate.getHours(),
+            nameDayDate.getMinutes(),
+            nameDayDate.getSeconds()
+          ).getTime()
+        );
       } else if (
-        now >= tokenTimestamp &&
-        now < tokenTimestamp + DAY_IN_SECONDS
+        currentTimestamp >= nameDayTimestamp &&
+        currentTimestamp < nameDayTimestamp + DAY_IN_SECONDS
       ) {
         // if we are in the right day: we set directly a -1
         setPercentageCompleted(-1);
@@ -116,26 +231,43 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
         return;
       }
 
-      const previousTimestamp = newTimestamp - YEAR_IN_SECONDS;
-      const sliceYearCovered = now - previousTimestamp;
+      console.log({ nextNameDayTimestamp });
+      console.log({ previousTimestamp });
+
+      // const previousTimestamp = nextNameDayTimestamp - YEAR_IN_SECONDS;
+
+      const sliceYearCovered = currentTimestamp - previousTimestamp;
+      const totalDuration = nextNameDayTimestamp - previousTimestamp;
       // if the current year is a leap year, we add a day to the total number of days (otherwise we would have 365 days instead of 366)
-      let newYearInSecond = yearInSecond;
-      if (isBaseYearLeap) {
-        newYearInSecond += dayInSecond;
-      }
-      const progress = Number(sliceYearCovered) / newYearInSecond;
+      // let newYearInSecond = yearInSecond;
+      // if (isBaseYearLeap) {
+      //   newYearInSecond += dayInSecond;
+      // }
+      const progress = Number(sliceYearCovered) / Number(totalDuration);
       const percentage = progress * 100;
       setPercentageCompleted(percentage);
 
-      const sliceYearMising = newTimestamp - now;
-      const daysLeft = sliceYearMising / DAY_IN_SECONDS;
+      const sliceYearMising = nextNameDayTimestamp - currentTimestamp;
+      const daysLeft = sliceYearMising / BigInt(1000) / DAY_IN_SECONDS;
       setDaysLeft(Number(daysLeft));
+
+      console.log({ sliceYearCovered });
+      console.log({ totalDuration });
+      console.log({ progress });
+      console.log({ percentage });
+      console.log({ sliceYearMising });
+      console.log(Number(daysLeft));
     }
 
     if (tokenTimestampData) {
       getYearProgression(tokenTimestampData as unknown as bigint);
     }
   }, [tokenTimestampData, tokenTimestampError, tokenTimestampLoading]);
+
+  // useEffect(() => {
+  //   console.log(percentageCompleted);
+  //   console.log(daysLeft);
+  // }, [daysLeft, percentageCompleted]);
 
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
