@@ -30,7 +30,7 @@ export const TokenStats = ({
           {" $" + nameDayTokenBalanceData.symbol}
         </span>
       </div>
-      {!countdownEnd && percentage > 0 && percentage !== 100 && (
+      {!countdownEnd && (
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
           {time && (
@@ -39,14 +39,16 @@ export const TokenStats = ({
               {time.minutes} : {time.seconds}
             </span>
           )}
-          <Progress value={percentage} />
+          {percentage > 0 && percentage !== 100 && (
+            <Progress value={percentage} />
+          )}
         </div>
       )}
       {countdownEnd && (
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
           <span className="text-green-500"> in-day</span>
-          <Progress value={percentage} />
+          {percentage > 0 && <Progress value={percentage} />}
         </div>
       )}
     </div>

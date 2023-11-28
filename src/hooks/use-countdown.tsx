@@ -34,7 +34,13 @@ const calculateTimeUnits = (time: number): CountdownResult => {
 const calculatePercentage = (nameDayTimestamps: TokenTimestamps): number => {
   const { previousNameDayTimestamp, nextNameDayTimestamp } = nameDayTimestamps;
   const currentTimestamp = BigInt(new Date().getTime());
-  const sliceYearCovered = currentTimestamp - previousNameDayTimestamp;
+  let sliceYearCovered;
+  // edge case: if the token is not yet deployed
+  if (currentTimestamp < previousNameDayTimestamp) {
+    return -1;
+  } else {
+    sliceYearCovered = currentTimestamp - previousNameDayTimestamp;
+  }
   const totalDuration = nextNameDayTimestamp - previousNameDayTimestamp;
   const progress = Number(sliceYearCovered) / Number(totalDuration);
   return progress * 100;
