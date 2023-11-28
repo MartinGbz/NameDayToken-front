@@ -1,12 +1,12 @@
 "use client";
 
 // import { useCycleProgression } from "@/hooks/use-cycle-progression";
-import { Countdown } from "./countdown";
+// import { Countdown } from "./countdown";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { BiCoin } from "react-icons/bi";
 import { useCountdown } from "@/hooks/use-countdown";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { TokenTimestamps } from "@/types";
 
 interface MintingLiveProps {
@@ -14,9 +14,6 @@ interface MintingLiveProps {
 }
 
 export const MintingLive = ({ timestamps }: MintingLiveProps) => {
-  // const { percentage, daysLeft, sliceCycleMising } = useCycleProgression(
-  //   nameDayTokenTimestamp
-  // );
   const [countdownEnd, setCountdownEnd] = useState(false);
 
   const { percentage, time } = useCountdown(timestamps, () => {
@@ -24,8 +21,12 @@ export const MintingLive = ({ timestamps }: MintingLiveProps) => {
     setCountdownEnd(true);
   });
 
-  console.log("percentage", percentage);
-  console.log("time", time);
+  useEffect(() => {
+    console.log("percentage", percentage);
+  }, [percentage, time]);
+
+  // console.log("percentage", percentage);
+  // console.log("time", time);
 
   return (
     <div className="relative flex items-center justify-center flex-col">

@@ -10,4 +10,5 @@ export type Contract = {
 export type TokenTimestamps = {
   previousNameDayTimestamp: bigint;
   nextNameDayTimestamp: bigint;
+  isDay: boolean;
 };

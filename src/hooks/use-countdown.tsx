@@ -1,13 +1,7 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { ThemeModeToggle } from "@/components/theme-mode-toggle";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TokenTimestamps } from "@/types";
-
-// const secondsInDay = 86400;
-// const monthsInDay = 30.44 * secondsInDay;
-// const secondsInYear = 365.24 * secondsInDay;
 
 const secondsInDay = 86400;
 const monthsInDay = 30.44 * secondsInDay;
@@ -37,13 +31,7 @@ const calculateTimeUnits = (time: number): CountdownResult => {
   return { years, months, days, hours, minutes, seconds };
 };
 
-const calculatePercentage = (
-  time: number,
-  nameDayTimestamps: {
-    previousNameDayTimestamp: bigint;
-    nextNameDayTimestamp: bigint;
-  }
-): number => {
+const calculatePercentage = (nameDayTimestamps: TokenTimestamps): number => {
   const { previousNameDayTimestamp, nextNameDayTimestamp } = nameDayTimestamps;
   const currentTimestamp = BigInt(new Date().getTime());
   const sliceYearCovered = currentTimestamp - previousNameDayTimestamp;
@@ -53,33 +41,34 @@ const calculatePercentage = (
 };
 
 const getAllStats = (time: number, nameDayTimestamps: TokenTimestamps) => {
-  const percentage = calculatePercentage(time, nameDayTimestamps);
+  const percentage = calculatePercentage(nameDayTimestamps);
   const timeUnits = calculateTimeUnits(time);
   return { percentage: percentage, time: timeUnits };
 };
 
-export const useCountdown = (
-  nameDayTimestamps: {
-    previousNameDayTimestamp: bigint;
-    nextNameDayTimestamp: bigint;
-  },
-  countdownEnd: () => void,
-  delay: number = 1000
-) => {
-  const { previousNameDayTimestamp, nextNameDayTimestamp } = nameDayTimestamps;
+const getInitialTimestamp = (nameDayTimestamps: TokenTimestamps) => {
+  const { nextNameDayTimestamp: nextNameDayTimestamp } = nameDayTimestamps;
   let initialTimestamp;
 
-  if (
-    previousNameDayTimestamp == BigInt(0) &&
-    nextNameDayTimestamp == BigInt(0)
-  ) {
+  if (nameDayTimestamps.isDay) {
+    // we end here because we are in the day
     initialTimestamp = 0;
+    // return { percentage: 100, time: 0}
   } else {
     initialTimestamp = Math.trunc(
       Number(nextNameDayTimestamp - BigInt(new Date().getTime())) / 1000
     );
   }
 
+  return initialTimestamp;
+};
+
+export const useCountdown = (
+  nameDayTimestamps: TokenTimestamps,
+  countdownEnd: () => void,
+  delay: number = 1000
+) => {
+  let initialTimestamp = getInitialTimestamp(nameDayTimestamps);
   const [time, setTime] = useState(initialTimestamp);
 
   useEffect(() => {
@@ -99,5 +88,13 @@ export const useCountdown = (
     return () => clearInterval(interval);
   }, [countdownEnd, delay, time]);
 
-  return getAllStats(time, nameDayTimestamps);
+  // if we in the day we return 100% and 0 time
+  if (nameDayTimestamps.isDay) {
+    return {
+      percentage: 100,
+      time: { years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0 },
+    };
+  } else {
+    return getAllStats(time, nameDayTimestamps);
+  }
 };

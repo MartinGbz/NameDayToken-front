@@ -1,7 +1,6 @@
 "use client";
 
 import { useCountdown } from "@/hooks/use-countdown";
-import { Countdown } from "./countdown";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { TokenTimestamps } from "@/types";
@@ -19,13 +18,11 @@ export const TokenStats = ({
 }: TokenStatsProps) => {
   const [countdownEnd, setCountdownEnd] = useState(false);
   const { percentage, time } = useCountdown(timestamps, () => {
-    console.log("FINISHED");
+    // console.log("FINISHED");
     setCountdownEnd(true);
   });
 
-  console.log("percentage", percentage);
-  console.log("time", time);
-  console.log("################ countdownEnd", countdownEnd);
+  // console.log("percentage", percentage);
 
   return (
     <div>
@@ -39,7 +36,12 @@ export const TokenStats = ({
       {!countdownEnd && percentage > 0 && percentage !== 100 && (
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
-          {time && <Countdown currentTime={time} />}
+          {time && (
+            <span className="text-red-500">
+              {time.years} years {time.months} months {time.days} days{" "}
+              {time.hours} hours {time.minutes} minutes {time.seconds} seconds
+            </span>
+          )}
           <Progress value={percentage} />
         </div>
       )}

@@ -12,9 +12,8 @@ import {
 
 import { TokenStats } from "./token-stats";
 import { MintingLive } from "./minting-live";
-import { useEffect, useMemo } from "react";
-import { cycleProgression } from "./cycle-progression";
-// import { useCycleProgression } from "@/hooks/use-cycle-progression";
+import { useMemo } from "react";
+import { getPreviousAndNextTimestamp } from "./timestamps";
 
 interface DashboardProps {
   token: Contract;
@@ -54,22 +53,9 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
 
   const timestamps = useMemo(() => {
     if (tokenTimestampData) {
-      return cycleProgression(BigInt(1701188400));
-      // return cycleProgression(tokenTimestampData as unknown as bigint);
+      return getPreviousAndNextTimestamp(BigInt(1701190380));
     }
-    // else {
-    //   return {
-    //     // percentage: -1,
-    //     // sliceCycleMising: 0,
-    //     previousNameDayTimestamp: BigInt(0),
-    //     nextNameDayTimestamp: BigInt(0),
-    //   };
-    // }
   }, [tokenTimestampData]);
-
-  // console.log("percentage", percentage);
-  // console.log("sliceCycleMising", sliceCycleMising);
-  // console.log("****timestamps", timestamps);
 
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
@@ -97,12 +83,9 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
         <CardContent>
           {tokenData && tokenBalanceData && timestamps && (
             <TokenStats
-              // percentage={percentage}
-              // sliceCycleMising={sliceCycleMising}
               timestamps={timestamps}
               nameDayTokenData={tokenData}
               nameDayTokenBalanceData={tokenBalanceData}
-              // nameDayTokenTimestamp={BigInt(1701182400) as unknown as bigint}
             />
           )}
         </CardContent>
