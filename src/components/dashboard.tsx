@@ -85,31 +85,13 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
 
       if (currentNameDayTimestamp + DAY_IN_SECONDS < currentTimestamp) {
         // if we are in the future: we compute the correct timestamp of our current "cycle"
-        console.log("1");
         nextNameDayTimestamp = getDateFromOtherDate(currentNameDayDate, 1);
         previousNameDayTimestamp = getDateFromOtherDate(currentNameDayDate, 0);
       } else if (currentTimestamp < currentNameDayTimestamp) {
         // if we are in the past: we compute the correct timestamp of our current "cycle"
-        console.log("2");
-        // const missingYears =
-        //   (currentNameDayTimestamp - currentTimestamp) / YEAR_IN_SECONDS;
-
-        console.log(currentNameDayDate.getFullYear());
-        console.log(new Date().getFullYear());
-
-        // const missingYears =
-        //   currentNameDayDate.getFullYear() - new Date().getFullYear();
-
-        // if (missingYears >= 1) {
-        //   return null;
-        // }
-        // console.log(missingYears);
-        // console.log(Number(missingYears));
         nextNameDayTimestamp = currentNameDayTimestamp;
         // need to put the computation of new Date().getFullYear() minus baseTimeStamp.getFullYear() (from contract) instead of -1
         previousNameDayTimestamp = getDateFromOtherDate(currentNameDayDate, -1);
-        console.log(nextNameDayTimestamp);
-        console.log(previousNameDayTimestamp);
       } else if (
         currentTimestamp >= currentNameDayTimestamp &&
         currentTimestamp < currentNameDayTimestamp + DAY_IN_SECONDS
@@ -118,7 +100,6 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
         setPercentageCompleted(-1);
         return null;
       } else {
-        console.log("END");
         return null;
       }
 
@@ -126,11 +107,8 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
     }
 
     function getYearProgression(nameDayTimestamp: bigint) {
-      console.log(nameDayTimestamp);
-      const a = BigInt(1702684800);
-      console.log(a);
       const currentTimestamp = BigInt(new Date().getTime());
-      const timestamps = getPreviousAndNextTimestamp(a);
+      const timestamps = getPreviousAndNextTimestamp(nameDayTimestamp);
 
       if (timestamps == null) {
         return;
@@ -153,11 +131,6 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
       getYearProgression(tokenTimestampData as unknown as bigint);
     }
   }, [tokenTimestampData, tokenTimestampError, tokenTimestampLoading]);
-
-  // useEffect(() => {
-  //   console.log(percentageCompleted);
-  //   console.log(daysLeft);
-  // }, [daysLeft, percentageCompleted]);
 
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
