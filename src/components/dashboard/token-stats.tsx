@@ -34,9 +34,9 @@ export const TokenStats = ({
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
           {time && (
-            <span className="text-red-500">
-              {time.years} years {time.months} months {time.days} days{" "}
-              {time.hours} hours {time.minutes} minutes {time.seconds} seconds
+            <span className={"text-red-500"}>
+              {time.years} : {time.months} : {time.days} : {time.hours} :{" "}
+              {time.minutes} : {time.seconds}
             </span>
           )}
           <Progress value={percentage} />

@@ -51,11 +51,26 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
     functionName: "nameDayTimestamp",
   });
 
+  const {
+    data: tokenBaseTimestampData,
+    isError: tokenBaseTimestampError,
+    isLoading: tokenBaseTimestampLoading,
+  } = useContractRead({
+    address: token.address,
+    abi: token.ABI,
+    functionName: "getBaseTimestamp",
+  });
+
+  console.log(tokenBaseTimestampData);
+
   const timestamps = useMemo(() => {
     if (tokenTimestampData) {
-      return getPreviousAndNextTimestamp(BigInt(1701197940));
+      return getPreviousAndNextTimestamp(
+        tokenTimestampData as unknown as bigint,
+        tokenBaseTimestampData as unknown as bigint
+      );
     }
-  }, [tokenTimestampData]);
+  }, [tokenBaseTimestampData, tokenTimestampData]);
 
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
