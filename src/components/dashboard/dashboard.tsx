@@ -61,8 +61,6 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
     functionName: "getBaseTimestamp",
   });
 
-  console.log(tokenBaseTimestampData);
-
   const timestamps = useMemo(() => {
     if (tokenTimestampData) {
       return getPreviousAndNextTimestamp(

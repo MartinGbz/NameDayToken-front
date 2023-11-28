@@ -30,13 +30,11 @@ export function getPreviousAndNextTimestamp(
 
   if (currentNameDayTimestamp + SECONDS_IN_DAY < currentTimestamp) {
     // if we are in the future: we compute the correct timestamp of our current "cycle"
-    console.log("here 0");
     nextNameDayTimestamp = getDateFromOtherDate(currentNameDayDate, 1);
     previousNameDayTimestamp = getDateFromOtherDate(currentNameDayDate, 0);
     isDay = false;
   } else if (currentTimestamp < currentNameDayTimestamp) {
     // if we are in the past: we compute the correct timestamp of our current "cycle"
-    console.log("here");
     nextNameDayTimestamp = currentNameDayTimestamp;
     previousNameDayTimestamp = currentNameDayBaseTimestamp;
     isDay = false;
@@ -44,13 +42,11 @@ export function getPreviousAndNextTimestamp(
     currentTimestamp >= currentNameDayTimestamp &&
     currentTimestamp < currentNameDayTimestamp + SECONDS_IN_DAY
   ) {
-    console.log("here 2");
     // if we are in the right day: we set directly a -1
     previousNameDayTimestamp = BigInt(0);
     nextNameDayTimestamp = BigInt(0);
     isDay = true;
   } else {
-    console.log("here 3");
     previousNameDayTimestamp = BigInt(0);
     nextNameDayTimestamp = BigInt(0);
     isDay = false;

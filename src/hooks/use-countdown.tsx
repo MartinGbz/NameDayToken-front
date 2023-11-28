@@ -69,6 +69,19 @@ const getInitialTimestamp = (nameDayTimestamps: TokenTimestamps) => {
   return initialTimestamp;
 };
 
+/**
+ *
+ * @param nameDayTimestamps : timestamps of the previous and next name day + isDay: says if we are in the day
+ * @param countdownEnd: function to execute when the countdown is finished
+ * @param delay: delay between each countdown tick (default: 1000ms)
+ * @returns percentage and remaining time
+ * if currentTime is in the right day => percentage = 100 and time = 0 => no countdown
+ * if currentTime is after the right day => countdown of the next day (of the next year)
+ * if currentTime is before the right day => countdown of the right day (of the current year):
+ *  the percentage is calculated with the previous and next timestamp:
+ *  if the token is already deployed : the previous timestamp is the token contract deployement timestamp
+ *  else => percentage = -1 => countdown but no percentage
+ */
 export const useCountdown = (
   nameDayTimestamps: TokenTimestamps,
   countdownEnd: () => void,
