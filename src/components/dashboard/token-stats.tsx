@@ -18,11 +18,8 @@ export const TokenStats = ({
 }: TokenStatsProps) => {
   const [countdownEnd, setCountdownEnd] = useState(false);
   const { percentage, time } = useCountdown(timestamps, () => {
-    // console.log("FINISHED");
     setCountdownEnd(true);
   });
-
-  // console.log("percentage", percentage);
 
   return (
     <div>

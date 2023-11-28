@@ -13,7 +13,7 @@ import {
 import { TokenStats } from "./token-stats";
 import { MintingLive } from "./minting-live";
 import { useMemo } from "react";
-import { getPreviousAndNextTimestamp } from "./timestamps";
+import { getPreviousAndNextTimestamp } from "@/utils/timestamps";
 
 interface DashboardProps {
   token: Contract;
@@ -53,7 +53,7 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
 
   const timestamps = useMemo(() => {
     if (tokenTimestampData) {
-      return getPreviousAndNextTimestamp(BigInt(1701190380));
+      return getPreviousAndNextTimestamp(BigInt(1701197940));
     }
   }, [tokenTimestampData]);
 
