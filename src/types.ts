@@ -6,3 +6,8 @@ export type Contract = {
   address: Address;
   ABI: any;
 };
+
+export type TokenTimestamps = {
+  previousNameDayTimestamp: bigint;
+  nextNameDayTimestamp: bigint;
+};
