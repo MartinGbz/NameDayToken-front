@@ -41,16 +41,14 @@ export const TokenStats = ({
               {time.minutes} : {time.seconds}
             </span>
           )}
-          {percentage > 0 && percentage !== 100 && (
-            <Progress value={percentage} />
-          )}
+          {percentage && <Progress value={percentage} />}
         </div>
       )}
       {countdownEnd && (
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
           <span className="text-green-500"> in-day</span>
-          {percentage > 0 && <Progress value={percentage} />}
+          {percentage && <Progress value={percentage} />}
         </div>
       )}
     </div>

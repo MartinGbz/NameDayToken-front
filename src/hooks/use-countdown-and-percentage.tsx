@@ -34,13 +34,7 @@ const calculateTimeUnits = (time: number): CountdownResult => {
 const calculatePercentage = (nameDayTimestamps: TokenTimestamps): number => {
   const { previousNameDayTimestamp, nextNameDayTimestamp } = nameDayTimestamps;
   const currentTimestamp = BigInt(new Date().getTime());
-  let sliceYearCovered;
-  // edge case: if the token is not yet deployed
-  if (currentTimestamp < previousNameDayTimestamp) {
-    return -1;
-  } else {
-    sliceYearCovered = currentTimestamp - previousNameDayTimestamp;
-  }
+  const sliceYearCovered = currentTimestamp - previousNameDayTimestamp;
   const totalDuration = nextNameDayTimestamp - previousNameDayTimestamp;
   const progress = Number(sliceYearCovered) / Number(totalDuration);
   return progress * 100;
@@ -78,9 +72,7 @@ const getInitialTimestamp = (nameDayTimestamps: TokenTimestamps) => {
  * if currentTime is in the right day => percentage = 100 and time = 0 => no countdown
  * if currentTime is after the right day => countdown of the next day (of the next year)
  * if currentTime is before the right day => countdown of the right day (of the current year):
- *  the percentage is calculated with the previous and next timestamp:
- *  if the token is already deployed : the previous timestamp is the token contract deployement timestamp
- *  else => percentage = -1 => countdown but no percentage
+ *  the percentage is calculated with the previous and next timestamp: the previous timestamp is the token contract deployement timestamp
  */
 export const useCountdownAndPercentage = (
   nameDayTimestamps: TokenTimestamps,
