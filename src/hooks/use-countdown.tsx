@@ -31,64 +31,12 @@ const calculateTimeUnits = (time: number): CountdownResult => {
   return { years, months, days, hours, minutes, seconds };
 };
 
-const calculatePercentage = (nameDayTimestamps: TokenTimestamps): number => {
-  const { previousNameDayTimestamp, nextNameDayTimestamp } = nameDayTimestamps;
-  const currentTimestamp = BigInt(new Date().getTime());
-  let sliceYearCovered;
-  // edge case: if the token is not yet deployed
-  if (currentTimestamp < previousNameDayTimestamp) {
-    return -1;
-  } else {
-    sliceYearCovered = currentTimestamp - previousNameDayTimestamp;
-  }
-  const totalDuration = nextNameDayTimestamp - previousNameDayTimestamp;
-  const progress = Number(sliceYearCovered) / Number(totalDuration);
-  return progress * 100;
-};
-
-const getAllStats = (time: number, nameDayTimestamps: TokenTimestamps) => {
-  const percentage = calculatePercentage(nameDayTimestamps);
-  const timeUnits = calculateTimeUnits(time);
-  return { percentage: percentage, time: timeUnits };
-};
-
-const getInitialTimestamp = (nameDayTimestamps: TokenTimestamps) => {
-  const { nextNameDayTimestamp: nextNameDayTimestamp } = nameDayTimestamps;
-  let initialTimestamp;
-
-  if (nameDayTimestamps.isDay) {
-    // we end here because we are in the day
-    initialTimestamp = 0;
-    // return { percentage: 100, time: 0}
-  } else {
-    initialTimestamp = Math.trunc(
-      Number(nextNameDayTimestamp - BigInt(new Date().getTime())) / 1000
-    );
-  }
-
-  return initialTimestamp;
-};
-
-/**
- *
- * @param nameDayTimestamps : timestamps of the previous and next name day + isDay: says if we are in the day
- * @param countdownEnd: function to execute when the countdown is finished
- * @param delay: delay between each countdown tick (default: 1000ms)
- * @returns percentage and remaining time
- * if currentTime is in the right day => percentage = 100 and time = 0 => no countdown
- * if currentTime is after the right day => countdown of the next day (of the next year)
- * if currentTime is before the right day => countdown of the right day (of the current year):
- *  the percentage is calculated with the previous and next timestamp:
- *  if the token is already deployed : the previous timestamp is the token contract deployement timestamp
- *  else => percentage = -1 => countdown but no percentage
- */
 export const useCountdown = (
-  nameDayTimestamps: TokenTimestamps,
+  targetTime: number,
   countdownEnd: () => void,
   delay: number = 1000
 ) => {
-  let initialTimestamp = getInitialTimestamp(nameDayTimestamps);
-  const [time, setTime] = useState(initialTimestamp);
+  const [time, setTime] = useState(targetTime);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -107,13 +55,5 @@ export const useCountdown = (
     return () => clearInterval(interval);
   }, [countdownEnd, delay, time]);
 
-  // if we in the day we return 100% and 0 time
-  if (nameDayTimestamps.isDay) {
-    return {
-      percentage: 100,
-      time: { years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0 },
-    };
-  } else {
-    return getAllStats(time, nameDayTimestamps);
-  }
+  return calculateTimeUnits(time);
 };

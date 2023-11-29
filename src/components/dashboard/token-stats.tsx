@@ -1,6 +1,6 @@
 "use client";
 
-import { useCountdown } from "@/hooks/use-countdown";
+import { useCountdownAndPercentage } from "@/hooks/use-countdown-and-percentage";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { TokenTimestamps } from "@/types";
@@ -17,9 +17,11 @@ export const TokenStats = ({
   nameDayTokenBalanceData,
 }: TokenStatsProps) => {
   const [countdownEnd, setCountdownEnd] = useState(false);
-  const { percentage, time } = useCountdown(timestamps, () => {
+  const { percentage, time } = useCountdownAndPercentage(timestamps, () => {
     setCountdownEnd(true);
   });
+
+  console.log(timestamps);
 
   return (
     <div>

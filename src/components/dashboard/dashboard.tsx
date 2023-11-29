@@ -66,6 +66,8 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
       return getPreviousAndNextTimestamp(
         tokenTimestampData as unknown as bigint,
         tokenBaseTimestampData as unknown as bigint
+        // BigInt(1669681440),
+        // BigInt(1669595040)
       );
     }
   }, [tokenBaseTimestampData, tokenTimestampData]);

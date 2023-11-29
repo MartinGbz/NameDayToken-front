@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { BiCoin } from "react-icons/bi";
-import { useCountdown } from "@/hooks/use-countdown";
+import { useCountdownAndPercentage } from "@/hooks/use-countdown-and-percentage";
 import { useState } from "react";
 import { TokenTimestamps } from "@/types";
 
@@ -13,7 +13,7 @@ interface MintingLiveProps {
 export const MintingLive = ({ timestamps }: MintingLiveProps) => {
   const [countdownEnd, setCountdownEnd] = useState(false);
 
-  useCountdown(timestamps, () => {
+  useCountdownAndPercentage(timestamps, () => {
     setCountdownEnd(true);
   });
 
