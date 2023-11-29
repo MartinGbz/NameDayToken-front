@@ -12,8 +12,6 @@ import {
 
 import { TokenStats } from "./token-stats";
 import { MintingLive } from "./minting-live";
-import { useMemo } from "react";
-import { getPreviousAndNextTimestamp } from "@/utils/timestamps";
 
 interface DashboardProps {
   token: Contract;
@@ -61,17 +59,6 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
     functionName: "getBaseTimestamp",
   });
 
-  const timestamps = useMemo(() => {
-    if (tokenTimestampData) {
-      return getPreviousAndNextTimestamp(
-        tokenTimestampData as unknown as bigint,
-        tokenBaseTimestampData as unknown as bigint
-        // BigInt(1669681440),
-        // BigInt(1669595040)
-      );
-    }
-  }, [tokenBaseTimestampData, tokenTimestampData]);
-
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
       <Card>
@@ -89,20 +76,30 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
           </div>
         </CardContent>
       </Card>
-      {timestamps && <MintingLive timestamps={timestamps} />}
+      {tokenTimestampData && tokenBaseTimestampData && (
+        <MintingLive
+          tokenTimestampData={tokenTimestampData}
+          tokenBaseTimestampData={tokenBaseTimestampData}
+        />
+      )}
       <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Token infos</CardTitle>
           <CardDescription>Token stats</CardDescription>
         </CardHeader>
         <CardContent>
-          {tokenData && tokenBalanceData && timestamps && (
-            <TokenStats
-              timestamps={timestamps}
-              nameDayTokenData={tokenData}
-              nameDayTokenBalanceData={tokenBalanceData}
-            />
-          )}
+          {tokenTimestampData &&
+            tokenBaseTimestampData &&
+            tokenData &&
+            tokenBalanceData && (
+              <TokenStats
+                // timestamps={timestamps}
+                tokenTimestampData={tokenTimestampData}
+                tokenBaseTimestampData={tokenBaseTimestampData}
+                nameDayTokenData={tokenData}
+                nameDayTokenBalanceData={tokenBalanceData}
+              />
+            )}
         </CardContent>
       </Card>
     </div>

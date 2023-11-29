@@ -2,26 +2,26 @@
 
 import { useCountdownAndPercentage } from "@/hooks/use-countdown-and-percentage";
 import { Progress } from "@/components/ui/progress";
-import { useState } from "react";
-import { TokenTimestamps } from "@/types";
 
 interface TokenStatsProps {
-  timestamps: TokenTimestamps;
+  tokenTimestampData: any;
+  tokenBaseTimestampData: any;
   nameDayTokenData: any;
   nameDayTokenBalanceData: any;
 }
 
 export const TokenStats = ({
-  timestamps,
+  tokenTimestampData,
+  tokenBaseTimestampData,
   nameDayTokenData,
   nameDayTokenBalanceData,
 }: TokenStatsProps) => {
-  const [countdownEnd, setCountdownEnd] = useState(false);
-  const { percentage, time } = useCountdownAndPercentage(timestamps, () => {
-    setCountdownEnd(true);
-  });
-
-  console.log(timestamps);
+  const { percentage, time, nameDayTime, isDay } = useCountdownAndPercentage(
+    // tokenTimestampData,
+    // tokenBaseTimestampData
+    BigInt(1543499230),
+    BigInt(1543411150)
+  );
 
   return (
     <div>
@@ -32,7 +32,7 @@ export const TokenStats = ({
           {" $" + nameDayTokenBalanceData.symbol}
         </span>
       </div>
-      {!countdownEnd && (
+      {!isDay && (
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
           {time && (
@@ -44,10 +44,17 @@ export const TokenStats = ({
           {percentage && <Progress value={percentage} />}
         </div>
       )}
-      {countdownEnd && (
+      {isDay && (
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
-          <span className="text-green-500"> in-day</span>
+          {nameDayTime && (
+            <span className="text-green-500">
+              {" "}
+              {nameDayTime.years} : {nameDayTime.months} : {nameDayTime.days} :{" "}
+              {nameDayTime.hours} : {nameDayTime.minutes} :{" "}
+              {nameDayTime.seconds}
+            </span>
+          )}
           {percentage && <Progress value={percentage} />}
         </div>
       )}

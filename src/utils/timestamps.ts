@@ -38,11 +38,17 @@ export function getPreviousAndNextTimestamp(
     currentTimestamp0 < currentNameDayTimestamp0 + SECONDS_IN_DAY
   ) {
     // if we are in the right day
-    previousNameDayTimestamp = currentNameDayTimestamp;
-    nextNameDayTimestamp = currentNameDayTimestamp;
+    previousNameDayTimestamp = getDateFromOtherDate(
+      currentNameDayDate,
+      currentDate.getFullYear()
+    );
+    nextNameDayTimestamp = getDateFromOtherDate(
+      currentNameDayDate,
+      currentDate.getFullYear()
+    );
     isDay = true;
   } else {
-    // if we are not in the right day: we compute the correct timestamp of our current "cycle"
+    // if we are not in the right day: we compute the correct timestamps of our current "cycle"
     if (currentTimestamp0 < currentNameDayTimestamp0) {
       nextNameDayTimestamp = getDateFromOtherDate(
         currentNameDayDate,
@@ -54,7 +60,10 @@ export function getPreviousAndNextTimestamp(
         currentNameDayDate,
         currentDate.getFullYear() + 1
       );
-      previousNameDayTimestamp = currentNameDayTimestamp0;
+      previousNameDayTimestamp = getDateFromOtherDate(
+        currentNameDayDate,
+        currentDate.getFullYear()
+      );
     }
     isDay = false;
   }
