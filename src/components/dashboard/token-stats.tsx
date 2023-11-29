@@ -16,11 +16,11 @@ export const TokenStats = ({
   nameDayTokenData,
   nameDayTokenBalanceData,
 }: TokenStatsProps) => {
-  const { percentage, time, nameDayTime, isDay } = useCountdownAndPercentage(
-    // tokenTimestampData,
-    // tokenBaseTimestampData
-    BigInt(1543499230),
-    BigInt(1543411150)
+  const { percentage, cycleTime, dayTime, isDay } = useCountdownAndPercentage(
+    tokenTimestampData * BigInt(1000),
+    tokenBaseTimestampData * BigInt(1000)
+    // BigInt(1543499230 * 1000),
+    // BigInt(1543411150 * 1000)
   );
 
   return (
@@ -35,10 +35,10 @@ export const TokenStats = ({
       {!isDay && (
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
-          {time && (
+          {cycleTime && (
             <span className={"text-red-500"}>
-              {time.years} : {time.months} : {time.days} : {time.hours} :{" "}
-              {time.minutes} : {time.seconds}
+              {cycleTime.years} : {cycleTime.months} : {cycleTime.days} :{" "}
+              {cycleTime.hours} : {cycleTime.minutes} : {cycleTime.seconds}
             </span>
           )}
           {percentage && <Progress value={percentage} />}
@@ -47,12 +47,11 @@ export const TokenStats = ({
       {isDay && (
         <div className="font-medium md:text-lg space-y-2">
           <span>Next mint: </span>
-          {nameDayTime && (
+          {dayTime && (
             <span className="text-green-500">
               {" "}
-              {nameDayTime.years} : {nameDayTime.months} : {nameDayTime.days} :{" "}
-              {nameDayTime.hours} : {nameDayTime.minutes} :{" "}
-              {nameDayTime.seconds}
+              {dayTime.years} : {dayTime.months} : {dayTime.days} :{" "}
+              {dayTime.hours} : {dayTime.minutes} : {dayTime.seconds}
             </span>
           )}
           {percentage && <Progress value={percentage} />}

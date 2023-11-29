@@ -44,56 +44,60 @@ const calculatePercentage = (
     totalDuration = secondsInDay * 1000;
   }
   const progress = sliceCovered / totalDuration;
+  // console.log({ nameDayTimestamps });
+  // console.log({ currentTimestamp });
+  // console.log({ sliceCovered });
+  // console.log({ totalDuration });
+  // console.log({ progress });
   return progress * 100;
 };
 
 const getAllStats = (
   nameDayTimestamps: TokenTimestamps,
-  time: number,
-  nameDayTime: number,
+  cycleTime: number,
+  dayTime: number,
   isDay: boolean
 ) => {
   const percentage = calculatePercentage(nameDayTimestamps, isDay);
-  const timeUnits = calculateTimeUnits(!isDay ? time : nameDayTime);
+  const timeUnits = calculateTimeUnits(!isDay ? cycleTime : dayTime);
   return {
     percentage: percentage,
-    time: !isDay ? timeUnits : undefined,
-    nameDayTime: isDay ? timeUnits : undefined,
+    cycleTime: !isDay ? timeUnits : undefined,
+    dayTime: isDay ? timeUnits : undefined,
     isDay: isDay,
   };
 };
 
+/**
+ *
+ * @param nameDayTimestamps
+ * @param isDay
+ * @returns the initial timestamp for the countdown (in seconds)
+ */
 const getInitialTimestamp = (
   nameDayTimestamps: TokenTimestamps,
-  isDay: boolean
+  isDay: boolean,
+  type: "cycle" | "day"
 ) => {
   let initialTimestamp;
-  if (isDay) {
-    initialTimestamp = 0;
+
+  if (type == "cycle") {
+    initialTimestamp = isDay
+      ? 0
+      : Math.trunc(
+          Number(
+            nameDayTimestamps.nextNameDayTimestamp -
+              BigInt(new Date().getTime())
+          ) / 1000
+        );
   } else {
-    initialTimestamp = Math.trunc(
-      Number(
-        nameDayTimestamps.nextNameDayTimestamp - BigInt(new Date().getTime())
-      ) / 1000
-    );
+    initialTimestamp = !isDay
+      ? 0
+      : Number(nameDayTimestamps.nextNameDayTimestamp) / 1000 +
+        secondsInDay -
+        Math.trunc(new Date().getTime() / 1000);
   }
 
-  return initialTimestamp;
-};
-
-const getInitialNameDayTimestamp = (
-  nameDayTimestamps: TokenTimestamps,
-  isDay: boolean
-) => {
-  let initialTimestamp;
-  if (!isDay) {
-    initialTimestamp = 0;
-  } else {
-    initialTimestamp =
-      Number(nameDayTimestamps.nextNameDayTimestamp) / 1000 +
-      secondsInDay -
-      Math.trunc(new Date().getTime() / 1000);
-  }
   return initialTimestamp;
 };
 
@@ -120,28 +124,33 @@ export const useCountdownAndPercentage = (
 
   const [isDay, setIsDay] = useState(nameDayTimestamps.isDay);
 
-  const initialTimestamp = getInitialTimestamp(nameDayTimestamps, isDay);
-  const [time, setTime] = useState(initialTimestamp);
-
-  const initialNameDayTime = getInitialNameDayTimestamp(
+  const initialCycleTimestamp = getInitialTimestamp(
     nameDayTimestamps,
-    isDay
+    isDay,
+    "cycle"
   );
-  const [nameDayTime, setNameDayTime] = useState(initialNameDayTime);
+  const [cycleTime, setCycleTime] = useState(initialCycleTimestamp);
+
+  const initialNameDayTime = getInitialTimestamp(
+    nameDayTimestamps,
+    isDay,
+    "day"
+  );
+  const [dayTime, setDayTime] = useState(initialNameDayTime);
 
   // console.log({ isDay, time, nameDayTime });
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime((prevTime) => {
+      setCycleTime((prevTime) => {
         if (prevTime == 0 && !isDay) {
           setIsDay(true);
           const newTimestamps = getPreviousAndNextTimestamp(
             tokenTimestampData,
             tokenBaseTimestampData
           );
-          setNameDayTime(getInitialNameDayTimestamp(newTimestamps, true));
-          setTime(getInitialTimestamp(newTimestamps, true));
+          setDayTime(getInitialTimestamp(newTimestamps, true, "day"));
+          setCycleTime(getInitialTimestamp(newTimestamps, true, "cycle"));
         }
 
         if (prevTime > 0) {
@@ -151,7 +160,7 @@ export const useCountdownAndPercentage = (
         }
       });
 
-      setNameDayTime((prevTime) => {
+      setDayTime((prevTime) => {
         if (prevTime == 0 && isDay) {
           setIsDay(false);
           console.log(nameDayTimestamps);
@@ -159,8 +168,8 @@ export const useCountdownAndPercentage = (
             tokenTimestampData,
             tokenBaseTimestampData
           );
-          setNameDayTime(getInitialNameDayTimestamp(newTimestamps, false));
-          setTime(getInitialTimestamp(newTimestamps, false));
+          setDayTime(getInitialTimestamp(newTimestamps, false, "day"));
+          setCycleTime(getInitialTimestamp(newTimestamps, false, "cycle"));
         }
 
         if (prevTime > 0) {
@@ -180,5 +189,5 @@ export const useCountdownAndPercentage = (
     tokenTimestampData,
   ]);
 
-  return getAllStats(nameDayTimestamps, time, nameDayTime, isDay);
+  return getAllStats(nameDayTimestamps, cycleTime, dayTime, isDay);
 };

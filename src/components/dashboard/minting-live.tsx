@@ -13,14 +13,12 @@ export const MintingLive = ({
   tokenTimestampData,
   tokenBaseTimestampData,
 }: MintingLiveProps) => {
-  const { percentage, time, nameDayTime, isDay } = useCountdownAndPercentage(
-    // tokenTimestampData,
-    // tokenBaseTimestampData
-    BigInt(1543499230),
-    BigInt(1543411150)
+  const { percentage, cycleTime, dayTime, isDay } = useCountdownAndPercentage(
+    tokenTimestampData * BigInt(1000),
+    tokenBaseTimestampData * BigInt(1000)
+    // BigInt(1543499230),
+    // BigInt(1543411150)
   );
-
-  // console.log({ percentage, time, nameDayTime, isDay });
 
   return (
     <div className="relative flex items-center justify-center flex-col">

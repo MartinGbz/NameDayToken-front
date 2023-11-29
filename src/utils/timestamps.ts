@@ -1,5 +1,5 @@
-const secondsInDay = 86400 * 1000;
-const SECONDS_IN_DAY = BigInt(secondsInDay);
+const millisecondsInDay = 86400 * 1000;
+const MILLISECONDS_IN_DAY = BigInt(millisecondsInDay);
 
 function getDateFromOtherDate(date: Date, year: number) {
   return BigInt(
@@ -19,14 +19,10 @@ export function getPreviousAndNextTimestamp(
   nameDayTimestamp: bigint,
   nameDayBaseTimestamp: bigint
 ) {
-  const currentNameDayDate = new Date(Number(nameDayTimestamp) * 1000);
-  const currentNameDayTimestamp = nameDayTimestamp * BigInt(1000);
-  const currentNameDayTimestamp0 = getDateFromOtherDate(currentNameDayDate, 0);
-
-  const currentNameDayBaseTimestamp = nameDayBaseTimestamp * BigInt(1000);
+  const nameDayDate = new Date(Number(nameDayTimestamp));
+  const nameDayTimestamp0 = getDateFromOtherDate(nameDayDate, 0);
 
   const currentDate = new Date();
-  const currentTimestamp = BigInt(new Date().getTime());
   const currentTimestamp0 = getDateFromOtherDate(new Date(), 0);
 
   let nextNameDayTimestamp: bigint;
@@ -34,34 +30,34 @@ export function getPreviousAndNextTimestamp(
   let isDay: boolean;
 
   if (
-    currentTimestamp0 >= currentNameDayTimestamp0 &&
-    currentTimestamp0 < currentNameDayTimestamp0 + SECONDS_IN_DAY
+    currentTimestamp0 >= nameDayTimestamp0 &&
+    currentTimestamp0 < nameDayTimestamp0 + MILLISECONDS_IN_DAY
   ) {
     // if we are in the right day
     previousNameDayTimestamp = getDateFromOtherDate(
-      currentNameDayDate,
+      nameDayDate,
       currentDate.getFullYear()
     );
     nextNameDayTimestamp = getDateFromOtherDate(
-      currentNameDayDate,
+      nameDayDate,
       currentDate.getFullYear()
     );
     isDay = true;
   } else {
     // if we are not in the right day: we compute the correct timestamps of our current "cycle"
-    if (currentTimestamp0 < currentNameDayTimestamp0) {
+    if (currentTimestamp0 < nameDayTimestamp0) {
       nextNameDayTimestamp = getDateFromOtherDate(
-        currentNameDayDate,
+        nameDayDate,
         currentDate.getFullYear()
       );
-      previousNameDayTimestamp = currentNameDayBaseTimestamp;
+      previousNameDayTimestamp = nameDayBaseTimestamp;
     } else {
       nextNameDayTimestamp = getDateFromOtherDate(
-        currentNameDayDate,
+        nameDayDate,
         currentDate.getFullYear() + 1
       );
       previousNameDayTimestamp = getDateFromOtherDate(
-        currentNameDayDate,
+        nameDayDate,
         currentDate.getFullYear()
       );
     }
