@@ -17,19 +17,12 @@ interface CountdownResult {
   seconds: number;
 }
 
-const calculateTimeUnits = (time: number): CountdownResult => {
-  const years = Math.floor(time / secondsInYear);
-  const remainingMonthsInSeconds = time % secondsInYear;
-  const months = Math.floor(remainingMonthsInSeconds / monthsInDay);
-  const remainingDaysInSeconds = remainingMonthsInSeconds % monthsInDay;
-  const days = Math.floor(remainingDaysInSeconds / secondsInDay);
-  const remainingHoursInSeconds = remainingDaysInSeconds % secondsInDay;
-  const hours = Math.floor(remainingHoursInSeconds / 3600);
-  const remainingMinutesInSeconds = remainingHoursInSeconds % 3600;
-  const minutes = Math.floor(remainingMinutesInSeconds / 60);
-  const seconds = Math.floor(remainingMinutesInSeconds % 60);
-
-  return { years, months, days, hours, minutes, seconds };
+const calculateTimeUnits = (time: number) => {
+  const days = Math.floor(time / (24 * 3600));
+  const hours = Math.floor((time % (24 * 3600)) / 3600);
+  const minutes = Math.floor((time % 3600) / 60);
+  const seconds = time % 60;
+  return { days, hours, minutes, seconds };
 };
 
 const calculatePercentage = (
@@ -44,11 +37,6 @@ const calculatePercentage = (
     totalDuration = secondsInDay * 1000;
   }
   const progress = sliceCovered / totalDuration;
-  // console.log({ nameDayTimestamps });
-  // console.log({ currentTimestamp });
-  // console.log({ sliceCovered });
-  // console.log({ totalDuration });
-  // console.log({ progress });
   return progress * 100;
 };
 
@@ -59,6 +47,7 @@ const getAllStats = (
   isDay: boolean
 ) => {
   const percentage = calculatePercentage(nameDayTimestamps, isDay);
+  console.log({ cycleTime });
   const timeUnits = calculateTimeUnits(!isDay ? cycleTime : dayTime);
   return {
     percentage: percentage,
