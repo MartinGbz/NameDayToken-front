@@ -14,10 +14,10 @@ export const MintingLive = ({
   tokenBaseTimestampData,
 }: MintingLiveProps) => {
   const { percentage, cycleTime, dayTime, isDay } = useCountdownAndPercentage(
-    // tokenTimestampData * BigInt(1000),
-    // tokenBaseTimestampData * BigInt(1000)
-    BigInt(1543492530 * 1000),
-    BigInt(1543411150 * 1000)
+    tokenTimestampData * BigInt(1000),
+    tokenBaseTimestampData * BigInt(1000)
+    // BigInt(1543492530 * 1000),
+    // BigInt(1543411150 * 1000)
   );
 
   return (

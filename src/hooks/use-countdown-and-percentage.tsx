@@ -47,7 +47,6 @@ const getAllStats = (
   isDay: boolean
 ) => {
   const percentage = calculatePercentage(nameDayTimestamps, isDay);
-  // console.log({ cycleTime });
   const timeUnits = calculateTimeUnits(!isDay ? cycleTime : dayTime);
   return {
     percentage: percentage,
@@ -123,13 +122,7 @@ export const useCountdownAndPercentage = (
   );
   const [dayTime, setDayTime] = useState(initialNameDayTime);
 
-  // console.log({ isDay, time, nameDayTime });
-
-  // a interval is created when the component is mounted
-  // when the component is unmounted (when we return the new stats), the interval is cleared
   useEffect(() => {
-    console.log("IN useEffect");
-    console.log({ delay, isDay, tokenBaseTimestampData, tokenTimestampData });
     const interval = setInterval(() => {
       setCycleTime((prevTime) => {
         if (prevTime == 0 && !isDay) {
@@ -167,25 +160,11 @@ export const useCountdownAndPercentage = (
         }
       });
     }, delay);
-    console.log("interval:", interval);
 
     return () => {
-      console.log("clean interval: " + interval);
       clearInterval(interval);
     };
-  }, [
-    delay,
-    isDay,
-    // nameDayTimestamps,
-    tokenBaseTimestampData,
-    tokenTimestampData,
-  ]);
-
-  // console.log("Initial Cycle Timestamp:", initialCycleTimestamp);
-  // console.log("Initial Name Day Time:", initialNameDayTime);
-
-  // console.log("Initial Cycle Timestamp:", dayTime);
-  // console.log("Initial Name Day Time:", cycleTime);
+  }, [delay, isDay, tokenBaseTimestampData, tokenTimestampData]);
 
   return getAllStats(nameDayTimestamps, cycleTime, dayTime, isDay);
 };

@@ -60,19 +60,6 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
     functionName: "getBaseTimestamp",
   });
 
-  // console.log("render");
-
-  // useEffect(() => {
-  //   console.log("Dashboard Component is mounted");
-  //   // This function will be called when the component unmounts
-  //   return () => {
-  //     console.log("Dashboard Component is unmounting...");
-  //     // Perform cleanup operations here
-  //   };
-  // }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
-
-  // console.log("render Dashboard");
-
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
       <Card>
