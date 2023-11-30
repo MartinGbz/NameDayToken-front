@@ -5,8 +5,6 @@ import { TokenTimestamps } from "@/types";
 import { getPreviousAndNextTimestamp } from "@/utils/timestamps";
 
 const secondsInDay = 86400;
-const monthsInDay = 30.44 * secondsInDay;
-const secondsInYear = 365.24 * secondsInDay;
 
 interface CountdownResult {
   years: number;
@@ -122,6 +120,8 @@ export const useCountdownAndPercentage = (
   );
   const [dayTime, setDayTime] = useState(initialNameDayTime);
 
+  // the useEffect is run 1 time when the hook is called
+  // The interval is run every second in parallel of the react rendering
   useEffect(() => {
     const interval = setInterval(() => {
       setCycleTime((prevTime) => {
@@ -161,6 +161,13 @@ export const useCountdownAndPercentage = (
       });
     }, delay);
 
+    // The cleanup function is run when the useEffect is run again (when the dependencies change, when the hook is called again)
+    // when isDay changes, the previous useEffect run (at the countdown initialisation) is cleaned (using its cleanup), this will then clean the interval
+    // Then the useEffect is run.
+    // React Doc: After every re-render with changed dependencies, React will first run the cleanup function (if you provided it) with the old values, and then run your setup function with the new values. After your component is removed from the DOM, React will run your cleanup function.
+    // Link: https://react.dev/reference/react/useEffect
+    // React previous doc: When exactly does React clean up an effect? React performs the cleanup when the component unmounts. However, as we learned earlier, effects run for every render and not just once. This is why React also cleans up effects from the previous render before running the effects next time. We’ll discuss why this helps avoid bugs and how to opt out of this behavior in case it creates performance issues later below.
+    // Link: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     return () => {
       clearInterval(interval);
     };

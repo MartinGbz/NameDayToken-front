@@ -12,7 +12,6 @@ import {
 
 import { TokenStats } from "./token-stats";
 import { MintingLive } from "./minting-live";
-import { useEffect } from "react";
 
 interface DashboardProps {
   token: Contract;

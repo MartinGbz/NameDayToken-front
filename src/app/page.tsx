@@ -1,7 +1,7 @@
 "use client";
 
 import { Dashboard } from "@/components/dashboard/dashboard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNetwork } from "wagmi";
 import { TokensCombobox } from "@/components/tokens-combobox";
 import { Contract, TokenOption } from "@/types";
