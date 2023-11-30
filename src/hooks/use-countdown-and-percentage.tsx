@@ -47,7 +47,7 @@ const getAllStats = (
   isDay: boolean
 ) => {
   const percentage = calculatePercentage(nameDayTimestamps, isDay);
-  console.log({ cycleTime });
+  // console.log({ cycleTime });
   const timeUnits = calculateTimeUnits(!isDay ? cycleTime : dayTime);
   return {
     percentage: percentage,
@@ -73,12 +73,8 @@ const getInitialTimestamp = (
   if (type == "cycle") {
     initialTimestamp = isDay
       ? 0
-      : Math.trunc(
-          Number(
-            nameDayTimestamps.nextNameDayTimestamp -
-              BigInt(new Date().getTime())
-          ) / 1000
-        );
+      : Number(nameDayTimestamps.nextNameDayTimestamp) / 1000 -
+        Math.trunc(new Date().getTime() / 1000);
   } else {
     initialTimestamp = !isDay
       ? 0
@@ -129,7 +125,11 @@ export const useCountdownAndPercentage = (
 
   // console.log({ isDay, time, nameDayTime });
 
+  // a interval is created when the component is mounted
+  // when the component is unmounted (when we return the new stats), the interval is cleared
   useEffect(() => {
+    console.log("IN useEffect");
+    console.log({ delay, isDay, tokenBaseTimestampData, tokenTimestampData });
     const interval = setInterval(() => {
       setCycleTime((prevTime) => {
         if (prevTime == 0 && !isDay) {
@@ -152,7 +152,6 @@ export const useCountdownAndPercentage = (
       setDayTime((prevTime) => {
         if (prevTime == 0 && isDay) {
           setIsDay(false);
-          console.log(nameDayTimestamps);
           const newTimestamps = getPreviousAndNextTimestamp(
             tokenTimestampData,
             tokenBaseTimestampData
@@ -168,15 +167,25 @@ export const useCountdownAndPercentage = (
         }
       });
     }, delay);
+    console.log("interval:", interval);
 
-    return () => clearInterval(interval);
+    return () => {
+      console.log("clean interval: " + interval);
+      clearInterval(interval);
+    };
   }, [
     delay,
     isDay,
-    nameDayTimestamps,
+    // nameDayTimestamps,
     tokenBaseTimestampData,
     tokenTimestampData,
   ]);
+
+  // console.log("Initial Cycle Timestamp:", initialCycleTimestamp);
+  // console.log("Initial Name Day Time:", initialNameDayTime);
+
+  // console.log("Initial Cycle Timestamp:", dayTime);
+  // console.log("Initial Name Day Time:", cycleTime);
 
   return getAllStats(nameDayTimestamps, cycleTime, dayTime, isDay);
 };
