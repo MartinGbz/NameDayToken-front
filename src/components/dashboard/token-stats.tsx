@@ -35,8 +35,8 @@ export const TokenStats = ({
           <span>Next mint: </span>
           {cycleTime && (
             <span className={"text-red-500"}>
-              {cycleTime.days} : {cycleTime.hours} : {cycleTime.minutes} :{" "}
-              {cycleTime.seconds}
+              {cycleTime.days}d : {cycleTime.hours}h : {cycleTime.minutes}m :{" "}
+              {cycleTime.seconds}s
             </span>
           )}
           {percentage && <Progress value={percentage} />}
@@ -47,7 +47,7 @@ export const TokenStats = ({
           <span>End of mint: </span>
           {dayTime && (
             <span className="text-green-500">
-              {dayTime.hours} : {dayTime.minutes} : {dayTime.seconds}
+              {dayTime.hours}h : {dayTime.minutes}m : {dayTime.seconds}s
             </span>
           )}
           {percentage && <Progress value={percentage} />}

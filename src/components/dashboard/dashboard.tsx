@@ -93,7 +93,6 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
             tokenData &&
             tokenBalanceData && (
               <TokenStats
-                // timestamps={timestamps}
                 tokenTimestampData={tokenTimestampData}
                 tokenBaseTimestampData={tokenBaseTimestampData}
                 nameDayTokenData={tokenData}
