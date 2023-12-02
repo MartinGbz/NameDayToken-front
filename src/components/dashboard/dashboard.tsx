@@ -40,7 +40,7 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
   });
 
   const {
-    data: tokenTimestampData,
+    data: tokenTimestamp,
     isError: tokenTimestampError,
     isLoading: tokenTimestampLoading,
   } = useContractRead({
@@ -50,7 +50,7 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
   });
 
   const {
-    data: tokenBaseTimestampData,
+    data: tokenBaseTimestamp,
     isError: tokenBaseTimestampError,
     isLoading: tokenBaseTimestampLoading,
   } = useContractRead({
@@ -76,10 +76,10 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
           </div>
         </CardContent>
       </Card>
-      {tokenTimestampData && tokenBaseTimestampData && (
+      {tokenTimestamp && tokenBaseTimestamp && (
         <MintingLive
-          tokenTimestampData={tokenTimestampData}
-          tokenBaseTimestampData={tokenBaseTimestampData}
+          tokenTimestamp={tokenTimestamp as unknown as bigint}
+          tokenBaseTimestamp={tokenBaseTimestamp as unknown as bigint}
         />
       )}
       <Card className="col-span-2">
@@ -88,13 +88,13 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
           <CardDescription>Token stats</CardDescription>
         </CardHeader>
         <CardContent>
-          {tokenTimestampData &&
-            tokenBaseTimestampData &&
+          {tokenTimestamp &&
+            tokenBaseTimestamp &&
             tokenData &&
             tokenBalanceData && (
               <TokenStats
-                tokenTimestampData={tokenTimestampData}
-                tokenBaseTimestampData={tokenBaseTimestampData}
+                tokenTimestamp={tokenTimestamp as unknown as bigint}
+                tokenBaseTimestamp={tokenBaseTimestamp as unknown as bigint}
                 nameDayTokenData={tokenData}
                 nameDayTokenBalanceData={tokenBalanceData}
               />

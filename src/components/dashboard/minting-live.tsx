@@ -5,17 +5,17 @@ import { BiCoin } from "react-icons/bi";
 import { useCountdownAndPercentage } from "@/hooks/use-countdown-and-percentage";
 
 interface MintingLiveProps {
-  tokenTimestampData: any;
-  tokenBaseTimestampData: any;
+  tokenTimestamp: bigint;
+  tokenBaseTimestamp: bigint;
 }
 
 export const MintingLive = ({
-  tokenTimestampData,
-  tokenBaseTimestampData,
+  tokenTimestamp,
+  tokenBaseTimestamp,
 }: MintingLiveProps) => {
   const { percentage, cycleTime, dayTime, isDay } = useCountdownAndPercentage(
-    tokenTimestampData * BigInt(1000),
-    tokenBaseTimestampData * BigInt(1000)
+    tokenTimestamp * BigInt(1000),
+    tokenBaseTimestamp * BigInt(1000)
   );
 
   return (

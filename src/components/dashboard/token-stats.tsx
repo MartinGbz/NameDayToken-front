@@ -4,21 +4,21 @@ import { useCountdownAndPercentage } from "@/hooks/use-countdown-and-percentage"
 import { Progress } from "@/components/ui/progress";
 
 interface TokenStatsProps {
-  tokenTimestampData: any;
-  tokenBaseTimestampData: any;
+  tokenTimestamp: bigint;
+  tokenBaseTimestamp: bigint;
   nameDayTokenData: any;
   nameDayTokenBalanceData: any;
 }
 
 export const TokenStats = ({
-  tokenTimestampData,
-  tokenBaseTimestampData,
+  tokenTimestamp,
+  tokenBaseTimestamp,
   nameDayTokenData,
   nameDayTokenBalanceData,
 }: TokenStatsProps) => {
   const { percentage, cycleTime, dayTime, isDay } = useCountdownAndPercentage(
-    tokenTimestampData * BigInt(1000),
-    tokenBaseTimestampData * BigInt(1000)
+    tokenTimestamp * BigInt(1000),
+    tokenBaseTimestamp * BigInt(1000)
   );
 
   return (
