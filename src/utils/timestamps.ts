@@ -1,6 +1,8 @@
 const millisecondsInDay = 86400 * 1000;
 const MILLISECONDS_IN_DAY = BigInt(millisecondsInDay);
 
+const baseYear = 2000;
+
 function getDateFromOtherDate(date: Date, year: number) {
   return BigInt(
     new Date(
@@ -20,10 +22,10 @@ export function getPreviousAndNextTimestamp(
   nameDayBaseTimestamp: bigint
 ) {
   const nameDayDate = new Date(Number(nameDayTimestamp));
-  const nameDayTimestamp0 = getDateFromOtherDate(nameDayDate, 0);
+  const nameDayTimestamp0 = getDateFromOtherDate(nameDayDate, baseYear);
 
   const currentDate = new Date();
-  const currentTimestamp0 = getDateFromOtherDate(new Date(), 0);
+  const currentTimestamp0 = getDateFromOtherDate(new Date(), baseYear);
 
   let nextNameDayTimestamp: bigint;
   let previousNameDayTimestamp: bigint;

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 
 import { TokenStats } from "./token-stats";
-import { MintingLive } from "./minting-live";
+import { Mint } from "./mint";
 
 interface DashboardProps {
   token: Contract;
@@ -76,8 +76,11 @@ export const Dashboard = ({ token, chainId }: DashboardProps) => {
           </div>
         </CardContent>
       </Card>
-      {tokenTimestamp && tokenBaseTimestamp && (
-        <MintingLive
+      {tokenTimestamp && tokenBaseTimestamp && address && (
+        <Mint
+          address={address}
+          token={token}
+          tokenData={tokenData}
           tokenTimestamp={tokenTimestamp as unknown as bigint}
           tokenBaseTimestamp={tokenBaseTimestamp as unknown as bigint}
         />
