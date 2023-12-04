@@ -21,8 +21,6 @@ export const useIsDay = (
       if (isDay != currentIsDay) {
         setIsDay(currentIsDay);
       }
-      // console.log("---currentIsDay", currentIsDay);
-      // console.log("---isDay", isDay);
     }, 1000);
 
     return () => {

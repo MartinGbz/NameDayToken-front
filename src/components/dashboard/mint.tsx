@@ -2,10 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { BiCoin } from "react-icons/bi";
-import { useCountdownAndPercentage } from "@/hooks/use-countdown-and-percentage";
-import { sepolia, useContractRead } from "wagmi";
 import { Contract } from "@/types";
-import { Address, createPublicClient, http } from "viem";
+import { Address } from "viem";
 
 import {
   Dialog,

@@ -125,17 +125,17 @@ export const useCountdownAndPercentage = (
   useEffect(() => {
     const interval = setInterval(() => {
       setCycleTime((prevTime) => {
-        if (prevTime == 0 && !isDay) {
+        if (prevTime == 1 && !isDay) {
           setIsDay(true);
           const newTimestamps = getPreviousAndNextTimestamp(
             tokenTimestampData,
             tokenBaseTimestampData
           );
           setDayTime(getInitialTimestamp(newTimestamps, true, "day"));
-          setCycleTime(getInitialTimestamp(newTimestamps, true, "cycle"));
+          return getInitialTimestamp(newTimestamps, true, "cycle");
         }
 
-        if (prevTime > 0) {
+        if (prevTime > 1) {
           return prevTime - 1;
         } else {
           return prevTime;
@@ -143,17 +143,17 @@ export const useCountdownAndPercentage = (
       });
 
       setDayTime((prevTime) => {
-        if (prevTime == 0 && isDay) {
+        if (prevTime == 1 && isDay) {
           setIsDay(false);
           const newTimestamps = getPreviousAndNextTimestamp(
             tokenTimestampData,
             tokenBaseTimestampData
           );
-          setDayTime(getInitialTimestamp(newTimestamps, false, "day"));
           setCycleTime(getInitialTimestamp(newTimestamps, false, "cycle"));
+          return getInitialTimestamp(newTimestamps, false, "day");
         }
 
-        if (prevTime > 0) {
+        if (prevTime > 1) {
           return prevTime - 1;
         } else {
           return prevTime;
