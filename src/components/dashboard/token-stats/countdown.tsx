@@ -1,6 +1,6 @@
 "use client";
 
-import { useCountdownAndPercentage } from "@/hooks/use-countdown-and-percentage";
+import { useCountdownAndPercentage } from "@/hooks/use-countdown";
 import { Progress } from "@/components/ui/progress";
 
 interface CountdownProps {
