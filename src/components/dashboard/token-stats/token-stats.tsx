@@ -1,32 +1,37 @@
 "use client";
 
+import {
+  FetchBalanceResult,
+  FetchTokenResult,
+  NameDayTokenData,
+} from "@/types";
 import { Countdown } from "./countdown";
 
 interface TokenStatsProps {
-  tokenTimestamp: bigint;
-  tokenBaseTimestamp: bigint;
-  nameDayTokenData: any;
-  nameDayTokenBalanceData: any;
+  // tokenTimestamp: bigint;
+  // tokenBaseTimestamp: bigint;
+  tokenData: FetchTokenResult;
+  nameDayTokenBalanceData: FetchBalanceResult;
+  nameDayTokenData: NameDayTokenData;
 }
 
 export const TokenStats = ({
-  tokenTimestamp,
-  tokenBaseTimestamp,
-  nameDayTokenData,
+  tokenData,
   nameDayTokenBalanceData,
+  nameDayTokenData,
 }: TokenStatsProps) => {
   return (
     <div>
       <div className="font-medium md:text-lg">
         <span>Total supply: </span>
         <span>
-          {nameDayTokenData.totalSupply.formatted}{" "}
+          {tokenData.totalSupply.formatted}{" "}
           {" $" + nameDayTokenBalanceData.symbol}
         </span>
       </div>
       <Countdown
-        tokenTimestamp={tokenTimestamp}
-        tokenBaseTimestamp={tokenBaseTimestamp}
+        tokenTimestamp={nameDayTokenData.tokenTimestamp}
+        tokenBaseTimestamp={nameDayTokenData.tokenBaseTimestamp}
       />
     </div>
   );

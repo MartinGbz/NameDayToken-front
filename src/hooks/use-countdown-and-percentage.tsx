@@ -95,8 +95,8 @@ const getInitialTimestamp = (
  *  the percentage is calculated with the previous and next timestamp: the previous timestamp is the token contract deployement timestamp
  */
 export const useCountdownAndPercentage = (
-  tokenTimestampData: any,
-  tokenBaseTimestampData: any,
+  tokenTimestampData: bigint,
+  tokenBaseTimestampData: bigint,
   delay: number = 1000
 ) => {
   const nameDayTimestamps = getPreviousAndNextTimestamp(

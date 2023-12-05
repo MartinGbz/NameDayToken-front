@@ -2,7 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { BiCoin } from "react-icons/bi";
-import { Contract, EnsName, EnsNamesData } from "@/types";
+import {
+  EnsName,
+  EnsNamesData,
+  FetchTokenResult,
+  NameDayTokenData,
+} from "@/types";
 import { Address } from "viem";
 
 import {
@@ -20,36 +25,45 @@ import { EnsNamesCombobox } from "./ens-names-combobox";
 import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
 
+import { nameDayTokenABI } from "@/tokens";
+
 interface MintProps {
   address: Address;
-  token: Contract;
-  tokenData: any;
-  tokenTimestamp: bigint;
-  tokenBaseTimestamp: bigint;
+  tokenAddress: Address;
+  tokenData: FetchTokenResult;
+  // tokenTimestamp: bigint;
+  // tokenBaseTimestamp: bigint;
+  nameDayTokenData: NameDayTokenData;
 }
 
 export const Mint = ({
   address,
-  token,
+  tokenAddress,
   tokenData,
-  tokenTimestamp,
-  tokenBaseTimestamp,
+  // tokenTimestamp,
+  // tokenBaseTimestamp,
+  nameDayTokenData,
 }: MintProps) => {
+  console.log({ tokenData });
+  // console.log({ tokenTimestamp });
+  // console.log({ tokenBaseTimestamp });
   const [ensName, setEnsName] = useState<EnsName | undefined>(undefined);
   const [ensNames, setEnsNames] = useState<EnsName[]>([]);
 
   const isDay = useIsDay(
     BigInt(1701727200) * BigInt(1000),
-    tokenBaseTimestamp * BigInt(1000)
+    nameDayTokenData.tokenBaseTimestamp * BigInt(1000)
   );
+
+  console.log({ nameDayTokenData });
 
   const {
     data: mintPerUserPerYear,
     isError: mintPerUserPerYearError,
     isLoading: mintPerUserPerYearLoading,
   } = useContractRead({
-    address: token.address,
-    abi: token.ABI,
+    address: tokenAddress,
+    abi: nameDayTokenABI,
     functionName: "mintPerUserPerYear",
   });
 
@@ -59,10 +73,10 @@ export const Mint = ({
     isLoading: hasMintedLoading,
     refetch: hasMintedRefetch,
   } = useContractRead({
-    address: token.address,
-    abi: token.ABI,
+    address: tokenAddress,
+    abi: nameDayTokenABI,
     functionName: "hasMinted",
-    args: [new Date().getFullYear(), ensName?.value],
+    args: [BigInt(new Date().getFullYear()), ensName?.value ?? ""],
     enabled: false,
   });
 
@@ -98,8 +112,9 @@ export const Mint = ({
     }
   }, [ensName, hasMintedRefetch]);
 
-  console.log(ensName?.value);
-  console.log({ hasMinted });
+  // console.log(ensName?.value);
+  // console.log({ hasMinted });
+  // console.log({ tokenData });
 
   return (
     <div className="relative flex items-center justify-center flex-col">
@@ -133,7 +148,12 @@ export const Mint = ({
             ensNames={ensNames}
             onChange={(ensName) => setEnsName(ensName)}
           />
-          <Button disabled={!isDay}>
+          <Button
+            disabled={
+              !isDay ||
+              (hasMinted ? true : false) ||
+              (ensName == undefined && !hasMinted)
+            }>
             <BiCoin className="text-lg mr-1" />
             Mint
           </Button>

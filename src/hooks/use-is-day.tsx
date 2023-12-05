@@ -4,8 +4,8 @@ import { getPreviousAndNextTimestamp } from "@/utils/timestamps";
 import { useEffect, useState } from "react";
 
 export const useIsDay = (
-  tokenTimestampData: any,
-  tokenBaseTimestampData: any
+  tokenTimestampData: bigint,
+  tokenBaseTimestampData: bigint
 ) => {
   const [isDay, setIsDay] = useState(
     getPreviousAndNextTimestamp(tokenTimestampData, tokenBaseTimestampData)

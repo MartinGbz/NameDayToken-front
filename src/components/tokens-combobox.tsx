@@ -20,23 +20,23 @@ import {
 import { Address } from "wagmi";
 
 import tokensJSON from "@/tokens.json";
-import { Contract, TokenOption } from "@/types";
+import { TokenOption } from "@/types";
 
 interface ComboboxProps {
-  defaultValue: TokenOption;
   defaultPlaceholder: string;
-  onChange?: (value: Contract | undefined) => void;
+  onChange?: (value: Address | undefined) => void;
 }
 
 const tokens: TokenOption[] = tokensJSON as TokenOption[];
 
 export function TokensCombobox({
-  defaultValue,
   defaultPlaceholder,
   onChange,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<Contract | undefined>();
+  const [value, setValue] = React.useState<Address | undefined>(
+    tokens[0].value
+  );
 
   React.useEffect(() => {
     onChange?.(value);
@@ -52,11 +52,9 @@ export function TokensCombobox({
           className="w-[200px] justify-between dark:text-white">
           {value
             ? tokens.find(
-                (tokens) =>
-                  tokens.value.address.toLowerCase() ===
-                  value.address.toLowerCase()
+                (tokens) => tokens.value.toLowerCase() === value.toLowerCase()
               )?.label
-            : defaultValue.label}
+            : "Select a token"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -67,24 +65,23 @@ export function TokensCombobox({
           <CommandGroup>
             {tokens.map((token) => (
               <CommandItem
-                key={token.value.address}
-                value={token.value.address}
+                key={token.value}
+                value={token.value}
                 onSelect={(currentValue) => {
                   const newValue: Address = currentValue.startsWith("0x")
                     ? (currentValue as Address)
                     : `0x${currentValue}`;
                   setValue(
-                    newValue === value?.address ? undefined : token.value
+                    newValue.toLowerCase() === value?.toLowerCase()
+                      ? undefined
+                      : token.value
                   );
                   setOpen(false);
                 }}>
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value?.address === token.value.address ||
-                      defaultValue.value.address === token.value.address
-                      ? "opacity-100"
-                      : "opacity-0"
+                    value === token.value ? "opacity-100" : "opacity-0"
                   )}
                 />
                 {token.label}
