@@ -18,7 +18,7 @@ import { useIsDay } from "@/hooks/use-is-day";
 import { useEns } from "@/hooks/use-ens";
 import { EnsNamesCombobox } from "./ens-names-combobox";
 import { useEffect, useState } from "react";
-import { useContractRead } from "wagmi";
+import { useContractRead, useContractWrite } from "wagmi";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
 
@@ -39,7 +39,7 @@ export const Mint = ({
   const [ensNames, setEnsNames] = useState<EnsName[]>([]);
 
   const isDay = useIsDay(
-    BigInt(1701813600) * BigInt(1000),
+    nameDayTokenData.tokenTimestamp * BigInt(1000),
     nameDayTokenData.tokenBaseTimestamp * BigInt(1000)
   );
 
@@ -88,6 +88,12 @@ export const Mint = ({
     }
   }, [ensName, hasMintedRefetch]);
 
+  const { data, isLoading, isSuccess, write } = useContractWrite({
+    address: tokenAddress,
+    abi: nameDayTokenABI,
+    functionName: "mint",
+  });
+
   return (
     <div className="relative flex items-center justify-center flex-col">
       {isDay && (
@@ -106,14 +112,13 @@ export const Mint = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Mint {tokenData.name}</DialogTitle>
-            <DialogDescription>
-              Choose an ENS and mint your yearly{" "}
-              {Number(
-                BigInt(mintPerUserPerYear as unknown as bigint) /
-                  BigInt(10 ** 18)
-              )}{" "}
-              ${tokenData.symbol}
-            </DialogDescription>
+            {mintPerUserPerYear !== undefined && (
+              <DialogDescription>
+                Choose an ENS and mint your yearly{" "}
+                {Number(BigInt(mintPerUserPerYear) / BigInt(10 ** 18))} $
+                {tokenData.symbol}
+              </DialogDescription>
+            )}
           </DialogHeader>
           <Label htmlFor="ensName">ENS name</Label>
           <EnsNamesCombobox
@@ -125,6 +130,11 @@ export const Mint = ({
               !isDay ||
               (hasMinted ? true : false) ||
               (ensName == undefined && !hasMinted)
+            }
+            onClick={() =>
+              write({
+                args: [ensName?.value ?? ""],
+              })
             }>
             <BiCoin className="text-lg mr-1" />
             Mint

@@ -4,21 +4,9 @@ export const nameDayTokenABI = [
       { internalType: "string", name: "name_", type: "string" },
       { internalType: "string", name: "symbol_", type: "string" },
       { internalType: "string", name: "dayName_", type: "string" },
-      {
-        internalType: "uint256",
-        name: "nameDayTimestamp_",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "mintPerUserPerYear_",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "maxSupply_",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "nameDayTimestamp_", type: "uint256" },
+      { internalType: "uint256", name: "mintPerUserPerYear_", type: "uint256" },
+      { internalType: "uint256", name: "maxSupply_", type: "uint256" },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -26,11 +14,7 @@ export const nameDayTokenABI = [
   {
     inputs: [
       { internalType: "address", name: "spender", type: "address" },
-      {
-        internalType: "uint256",
-        name: "allowance",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "allowance", type: "uint256" },
       { internalType: "uint256", name: "needed", type: "uint256" },
     ],
     name: "ERC20InsufficientAllowance",
@@ -93,12 +77,7 @@ export const nameDayTokenABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "year",
-        type: "uint256",
-      },
+      { indexed: true, internalType: "uint256", name: "year", type: "uint256" },
       {
         indexed: true,
         internalType: "string",
@@ -112,18 +91,8 @@ export const nameDayTokenABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
+      { indexed: true, internalType: "address", name: "from", type: "address" },
+      { indexed: true, internalType: "address", name: "to", type: "address" },
       {
         indexed: false,
         internalType: "uint256",
