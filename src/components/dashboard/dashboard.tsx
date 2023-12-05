@@ -4,11 +4,9 @@ import {
   Address,
   useAccount,
   useBalance,
-  useContractRead,
   useContractReads,
   useToken,
 } from "wagmi";
-import { NameDayTokenData } from "@/types";
 import {
   Card,
   CardContent,
@@ -19,7 +17,6 @@ import {
 
 import { TokenStats } from "./token-stats/token-stats";
 import { Mint } from "./mint/mint";
-import { use, useEffect, useState } from "react";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
 

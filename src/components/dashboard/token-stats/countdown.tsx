@@ -13,7 +13,7 @@ export const Countdown = ({
   tokenBaseTimestamp,
 }: CountdownProps) => {
   const { percentage, cycleTime, dayTime, isDay } = useCountdownAndPercentage(
-    BigInt(1701727200) * BigInt(1000),
+    BigInt(1701813600) * BigInt(1000),
     tokenBaseTimestamp * BigInt(1000)
   );
 

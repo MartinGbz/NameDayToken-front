@@ -1,3 +1,4 @@
+import { EnsNamesData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
 import { Address } from "viem";
@@ -17,7 +18,7 @@ export const useEns = (address: Address) => {
     }
   `;
 
-  return useQuery({
+  return useQuery<EnsNamesData>({
     queryKey: ["ensNames"],
     queryFn: async () =>
       request(

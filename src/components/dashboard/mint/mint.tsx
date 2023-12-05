@@ -2,12 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { BiCoin } from "react-icons/bi";
-import {
-  EnsName,
-  EnsNamesData,
-  FetchTokenResult,
-  NameDayTokenData,
-} from "@/types";
+import { EnsName, FetchTokenResult, NameDayTokenData } from "@/types";
 import { Address } from "viem";
 
 import {
@@ -40,11 +35,11 @@ export const Mint = ({
   tokenData,
   nameDayTokenData,
 }: MintProps) => {
-  const [ensName, setEnsName] = useState<EnsName | undefined>(undefined);
+  const [ensName, setEnsName] = useState<EnsName>();
   const [ensNames, setEnsNames] = useState<EnsName[]>([]);
 
   const isDay = useIsDay(
-    BigInt(1701727200) * BigInt(1000),
+    BigInt(1701813600) * BigInt(1000),
     nameDayTokenData.tokenBaseTimestamp * BigInt(1000)
   );
 
@@ -71,36 +66,25 @@ export const Mint = ({
     enabled: false,
   });
 
-  const { data } = useEns(address);
+  const { data: EnsOwnedByAccount } = useEns(address);
 
   useEffect(() => {
-    if (!data) return;
-    setEnsNames(() => {
-      const ensNamesData = data as EnsNamesData;
-      const ensNames = ensNamesData.account.wrappedDomains.map(
-        (wrappedDomain) => {
-          // if(wrappedDomain.domain.labelName.includes(tokenData.name)) {
-          return {
-            label: wrappedDomain.domain.name,
-            value: wrappedDomain.domain.labelName,
-          };
-          // }
-        }
-      );
-      return ensNames;
-    });
-    hasMintedRefetch();
-  }, [data, hasMintedRefetch, tokenData.name]);
-
-  useEffect(() => {
+    if (!EnsOwnedByAccount) return;
+    const ensNames = EnsOwnedByAccount.account.wrappedDomains
+      .map((wrappedDomain) => {
+        return {
+          label: wrappedDomain.domain.name,
+          value: wrappedDomain.domain.labelName,
+        } as EnsName;
+      })
+      .filter((ensName) => ensName.label.includes(nameDayTokenData.dayName));
+    setEnsNames(ensNames);
     setEnsName(ensNames[0]);
-  }, [ensNames]);
+  }, [EnsOwnedByAccount, nameDayTokenData.dayName]);
 
   useEffect(() => {
     if (ensName) {
       hasMintedRefetch();
-      // console.log("refetch");
-      // console.log(new Date().getFullYear(), ensName?.value);
     }
   }, [ensName, hasMintedRefetch]);
 
