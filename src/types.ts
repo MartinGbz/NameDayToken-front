@@ -12,3 +12,20 @@ export type TokenTimestamps = {
   nextNameDayTimestamp: bigint;
   isDay: boolean;
 };
+
+export type EnsName = {
+  label: string;
+  value: string;
+};
+
+export type EnsNamesData = {
+  account: {
+    wrappedDomains: {
+      domain: {
+        labelName: string;
+        labelhash: string;
+        name: string;
+      };
+    }[];
+  };
+};

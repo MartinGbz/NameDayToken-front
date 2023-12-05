@@ -10,8 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { TokenStats } from "./token-stats";
-import { Mint } from "./mint";
+import { TokenStats } from "./token-stats/token-stats";
+import { Mint } from "./mint/mint";
 
 interface DashboardProps {
   token: Contract;
