@@ -1,12 +1,3 @@
-// import { Address } from "wagmi";
-
-// export const tokens = [
-//   {
-//     value: "0x86187f52B9Fa0f3EcA8DdC2D34c59149d9888917" as Address,
-//     label: "Martin Token",
-//   },
-// ];
-
 export const nameDayTokenABI = [
   {
     inputs: [

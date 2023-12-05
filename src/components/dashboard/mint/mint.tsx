@@ -25,14 +25,12 @@ import { EnsNamesCombobox } from "./ens-names-combobox";
 import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
 
-import { nameDayTokenABI } from "@/tokens";
+import { nameDayTokenABI } from "@/namedaytoken-abi";
 
 interface MintProps {
   address: Address;
   tokenAddress: Address;
   tokenData: FetchTokenResult;
-  // tokenTimestamp: bigint;
-  // tokenBaseTimestamp: bigint;
   nameDayTokenData: NameDayTokenData;
 }
 
@@ -40,13 +38,8 @@ export const Mint = ({
   address,
   tokenAddress,
   tokenData,
-  // tokenTimestamp,
-  // tokenBaseTimestamp,
   nameDayTokenData,
 }: MintProps) => {
-  console.log({ tokenData });
-  // console.log({ tokenTimestamp });
-  // console.log({ tokenBaseTimestamp });
   const [ensName, setEnsName] = useState<EnsName | undefined>(undefined);
   const [ensNames, setEnsNames] = useState<EnsName[]>([]);
 
@@ -54,8 +47,6 @@ export const Mint = ({
     BigInt(1701727200) * BigInt(1000),
     nameDayTokenData.tokenBaseTimestamp * BigInt(1000)
   );
-
-  console.log({ nameDayTokenData });
 
   const {
     data: mintPerUserPerYear,
@@ -84,21 +75,22 @@ export const Mint = ({
 
   useEffect(() => {
     if (!data) return;
-    console.log("data not null");
     setEnsNames(() => {
       const ensNamesData = data as EnsNamesData;
       const ensNames = ensNamesData.account.wrappedDomains.map(
         (wrappedDomain) => {
+          // if(wrappedDomain.domain.labelName.includes(tokenData.name)) {
           return {
             label: wrappedDomain.domain.name,
             value: wrappedDomain.domain.labelName,
           };
+          // }
         }
       );
       return ensNames;
     });
     hasMintedRefetch();
-  }, [data, hasMintedRefetch]);
+  }, [data, hasMintedRefetch, tokenData.name]);
 
   useEffect(() => {
     setEnsName(ensNames[0]);
@@ -107,14 +99,10 @@ export const Mint = ({
   useEffect(() => {
     if (ensName) {
       hasMintedRefetch();
-      console.log("refetch");
-      console.log(new Date().getFullYear(), ensName?.value);
+      // console.log("refetch");
+      // console.log(new Date().getFullYear(), ensName?.value);
     }
   }, [ensName, hasMintedRefetch]);
-
-  // console.log(ensName?.value);
-  // console.log({ hasMinted });
-  // console.log({ tokenData });
 
   return (
     <div className="relative flex items-center justify-center flex-col">

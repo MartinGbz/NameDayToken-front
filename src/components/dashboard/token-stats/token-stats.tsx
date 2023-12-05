@@ -8,8 +8,6 @@ import {
 import { Countdown } from "./countdown";
 
 interface TokenStatsProps {
-  // tokenTimestamp: bigint;
-  // tokenBaseTimestamp: bigint;
   tokenData: FetchTokenResult;
   nameDayTokenBalanceData: FetchBalanceResult;
   nameDayTokenData: NameDayTokenData;
