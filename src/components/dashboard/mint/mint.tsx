@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { BiCoin } from "react-icons/bi";
 import { EnsName, FetchTokenResult, NameDayTokenData } from "@/types";
 import { Address } from "viem";
+import { ExternalLink } from "lucide-react";
 
 import {
   Dialog,
@@ -18,7 +19,13 @@ import { useIsDay } from "@/hooks/use-is-day";
 import { useEns } from "@/hooks/use-ens";
 import { EnsNamesCombobox } from "./ens-names-combobox";
 import { use, useEffect, useState } from "react";
-import { useContractRead, useContractWrite } from "wagmi";
+import {
+  useContractRead,
+  useContractWrite,
+  useNetwork,
+  useWaitForTransaction,
+  useWatchPendingTransactions,
+} from "wagmi";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
 
@@ -29,6 +36,7 @@ interface MintProps {
   tokenAddress: Address;
   tokenData: FetchTokenResult;
   nameDayTokenData: NameDayTokenData;
+  onMint: () => void;
 }
 
 export const Mint = ({
@@ -36,9 +44,17 @@ export const Mint = ({
   tokenAddress,
   tokenData,
   nameDayTokenData,
+  onMint,
 }: MintProps) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const [ensName, setEnsName] = useState<EnsName>();
   const [ensNames, setEnsNames] = useState<EnsName[]>([]);
+
+  const { chain, chains } = useNetwork();
+
+  console.log(chain);
+  console.log(chains);
 
   const isDay = useIsDay(
     nameDayTokenData.tokenTimestamp * BigInt(1000),
@@ -90,30 +106,69 @@ export const Mint = ({
     }
   }, [ensName, hasMintedRefetch]);
 
-  const {
-    data,
-    isLoading: isMinting,
-    isSuccess: isMinted,
-    write,
-  } = useContractWrite({
+  const { data: txBroadcasted, write } = useContractWrite({
     address: tokenAddress,
     abi: nameDayTokenABI,
     functionName: "mint",
+    // onSuccess: () => {
+    //   console.log("success");
+    //   console.log(isMinting);
+    //   console.log(isMinted);
+    //   console.log(txBroadcasted?.hash);
+    //   toast.loading(
+    //     <div className="flex flex-col space-y-1">
+    //       <div>{"Minting..."}</div>
+    //       <a
+    //         href="youtube.com"
+    //         target="_blank"
+    //         className="flex flex-row items-center">
+    //         <ExternalLink className="h-[1.2rem] w-[1.2rem]" />
+    //         {txBroadcasted?.hash}
+    //       </a>
+    //     </div>,
+    //     {
+    //       style: {
+    //         background: "hsl(var(--background))",
+    //         borderColor: "gray",
+    //         color: "hsl(var(--foreground))",
+    //       },
+    //     }
+    //   );
+    // },
+  });
+
+  const { data, isError, isLoading } = useWaitForTransaction({
+    hash: txBroadcasted?.hash,
+    onSuccess(data) {
+      if (data.status == "success") {
+        toast.success("Minted!");
+        onMint();
+      }
+    },
   });
 
   useEffect(() => {
-    if (isMinting) {
-      toast.loading("Minting...", {
-        style: {
-          background: "hsl(var(--background))",
-          borderColor: "hsl(var(--border))",
-          color: "hsl(var(--foreground))",
-        },
-      });
-    } else if (isMinted) {
-      toast.success("Minted!");
+    console.log(txBroadcasted?.hash);
+    if (txBroadcasted?.hash) {
+      setDialogOpen(false);
+      toast.loading(
+        <div className="flex flex-col space-y-1">
+          <div>{"Minting..."}</div>
+          {chain?.blockExplorers && (
+            <a
+              href={
+                chain.blockExplorers.default.url + "/tx/" + txBroadcasted.hash
+              }
+              target="_blank"
+              className="flex flex-row items-center">
+              <ExternalLink className="h-[1.2rem] w-[1.2rem]" />
+              {txBroadcasted?.hash}
+            </a>
+          )}
+        </div>
+      );
     }
-  }, [isMinting, isMinted]);
+  }, [chain?.blockExplorers, txBroadcasted?.hash]);
 
   return (
     <div className="relative flex items-center justify-center flex-col">
@@ -123,9 +178,9 @@ export const Mint = ({
           <span className="text-red-400 font-semibold">Minting live</span>
         </div>
       )}
-      <Dialog>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
-          <Button disabled={!isDay} className="md:w-52 h-16 space-x-1">
+          <Button disabled={!isDay} className="md:w-52 space-x-1">
             <BiCoin className="text-lg mr-1" />
             Mint
           </Button>
@@ -152,10 +207,34 @@ export const Mint = ({
               (hasMinted ? true : false) ||
               (ensName == undefined && !hasMinted)
             }
-            onClick={() =>
-              write({
-                args: [ensName?.value ?? ""],
-              })
+            onClick={
+              () => {
+                console.log(ensName?.value);
+                write({
+                  args: [ensName?.value ?? ""],
+                });
+              }
+              // {
+              //   setDialogOpen(false);
+              //   toast.loading("Minting...\n\n tx: " + data?.hash);
+              //   toast.loading(
+              //     <div className="flex flex-col space-y-1">
+              //       <div>{"Minting..."}</div>
+              //       <a
+              //         href="youtube.com"
+              //         target="_blank"
+              //         className="flex flex-row items-center">
+              //         <ExternalLink className="h-[1.2rem] w-[1.2rem]" />
+              //         {"0x123" + data?.hash}
+              //       </a>
+              //     </div>
+              //   );
+              //   // toast.loading(<div>A custom toast with default styling</div>);
+
+              //   setTimeout(() => {
+              //     // toast.success("Minted!");
+              //   }, 2000);
+              // }
             }>
             <BiCoin className="text-lg mr-1" />
             Mint

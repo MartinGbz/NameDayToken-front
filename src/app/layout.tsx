@@ -22,7 +22,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <Toaster />
+          <Toaster richColors />
           <div className="h-screen w-screen flex flex-col justify-between text-black dark:text-white">
             <Header />
             {children}

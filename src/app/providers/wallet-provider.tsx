@@ -9,6 +9,7 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 // import { sepolia } from "wagmi/chains";
+import { foundry } from "wagmi/chains";
 import { sepolia } from "./chains/sepolia";
 import { publicProvider } from "wagmi/providers/public";
 import { useTheme } from "next-themes";
@@ -17,7 +18,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const { theme } = useTheme();
 
   const { chains, publicClient } = configureChains(
-    [sepolia],
+    [sepolia, foundry],
     [publicProvider()]
   );
 

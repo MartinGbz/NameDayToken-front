@@ -32,6 +32,7 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
     data: tokenBalanceData,
     isError,
     isLoading,
+    refetch: refetchBalance,
   } = useBalance({
     address: address,
     token: tokenAddress,
@@ -102,6 +103,7 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
           tokenAddress={tokenAddress}
           tokenData={tokenData}
           nameDayTokenData={nameDayTokenData}
+          onMint={refetchBalance}
         />
       )}
       <Card className="col-span-2">
