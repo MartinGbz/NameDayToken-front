@@ -17,10 +17,12 @@ import { Label } from "@/components/ui/label";
 import { useIsDay } from "@/hooks/use-is-day";
 import { useEns } from "@/hooks/use-ens";
 import { EnsNamesCombobox } from "./ens-names-combobox";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useContractRead, useContractWrite } from "wagmi";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
+
+import { toast } from "sonner";
 
 interface MintProps {
   address: Address;
@@ -88,11 +90,30 @@ export const Mint = ({
     }
   }, [ensName, hasMintedRefetch]);
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
+  const {
+    data,
+    isLoading: isMinting,
+    isSuccess: isMinted,
+    write,
+  } = useContractWrite({
     address: tokenAddress,
     abi: nameDayTokenABI,
     functionName: "mint",
   });
+
+  useEffect(() => {
+    if (isMinting) {
+      toast.loading("Minting...", {
+        style: {
+          background: "hsl(var(--background))",
+          borderColor: "hsl(var(--border))",
+          color: "hsl(var(--foreground))",
+        },
+      });
+    } else if (isMinted) {
+      toast.success("Minted!");
+    }
+  }, [isMinting, isMinted]);
 
   return (
     <div className="relative flex items-center justify-center flex-col">
