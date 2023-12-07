@@ -18,27 +18,25 @@ import { Label } from "@/components/ui/label";
 import { useIsDay } from "@/hooks/use-is-day";
 import { useEns } from "@/hooks/use-ens";
 import { EnsNamesCombobox } from "./ens-names-combobox";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useContractRead,
   useContractWrite,
   useNetwork,
   useWaitForTransaction,
-  useWatchPendingTransactions,
 } from "wagmi";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
 
 import { toast } from "sonner";
 
-import Confetti from "react-confetti";
+import ReactCanvasConfetti from "react-canvas-confetti";
 
 interface MintProps {
   address: Address;
   tokenAddress: Address;
   tokenData: FetchTokenResult;
   nameDayTokenData: NameDayTokenData;
-  onMint: () => void;
 }
 
 export const Mint = ({
@@ -46,9 +44,9 @@ export const Mint = ({
   tokenAddress,
   tokenData,
   nameDayTokenData,
-  onMint,
 }: MintProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [confettisRun, setConfettisRun] = useState<boolean>(false);
 
   const [ensName, setEnsName] = useState<EnsName>();
   const [ensNames, setEnsNames] = useState<EnsName[]>([]);
@@ -116,7 +114,7 @@ export const Mint = ({
     onSuccess(data) {
       if (data.status == "success") {
         toast.success("Minted!");
-        onMint();
+        setConfettisRun(true);
       }
     },
   });
@@ -143,8 +141,30 @@ export const Mint = ({
     }
   }, [chain?.blockExplorers, txBroadcasted?.hash]);
 
+  useEffect(() => {
+    if (confettisRun) {
+      setConfettisRun(false);
+    }
+  }, [confettisRun]);
+
   return (
     <div className="relative flex items-center justify-center flex-col">
+      <ReactCanvasConfetti
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          pointerEvents: "none",
+          width: "100%",
+          height: "100%",
+        }}
+        particleCount={150}
+        spread={120}
+        ticks={300}
+        startVelocity={90}
+        fire={confettisRun}
+        origin={{ x: 0.5, y: 0.7 }}
+      />
       {isDay && (
         <div className="absolute top-0 flex items-center space-x-1 p-1 border-2 border-red-400 rounded">
           <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse"></div>

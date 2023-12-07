@@ -20,11 +20,6 @@ import { Mint } from "./mint/mint";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
 
-import Confetti from "react-confetti";
-import ReactCanvasConfetti from "react-canvas-confetti";
-
-import { use, useEffect, useState } from "react";
-
 interface DashboardProps {
   tokenAddress: Address;
   chainId: number;
@@ -32,8 +27,6 @@ interface DashboardProps {
 
 export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
   const { address, isConnected } = useAccount();
-
-  const [run, setRun] = useState<boolean>(false);
 
   const {
     data: tokenBalanceData,
@@ -87,57 +80,8 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
     },
   });
 
-  useEffect(() => {
-    if (run) {
-      setRun(false);
-    }
-  }, [run]);
-
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
-      {/* <Confetti
-        width={window.innerWidth}
-        height={window.innerHeight}
-        numberOfPieces={run ? 2000 : 0}
-        // recycle={false}
-      /> */}
-      <ReactCanvasConfetti
-        // set the styles as for a usual react component
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          pointerEvents: "none",
-          width: "100%",
-          height: "100%",
-        }}
-        // set the class name as for a usual react component
-        className={"yourClassName"}
-        particleCount={125}
-        // spread={270}
-        spread={120}
-        ticks={300}
-        startVelocity={70}
-        fire={run}
-        origin={{ x: 0.5, y: 0.5 }}
-        // drift={10}
-        // set the callback for getting instance. The callback will be called after initialization ReactCanvasConfetti component
-      />
-
-      <button
-        onClick={() => {
-          // console.log("click");
-          // console.log(run);
-          // setRun(true);
-          // setTimeout(() => {
-          //   setRun(false);
-          // }, 1500);
-
-          setRun(true);
-          console.log(run);
-        }}>
-        confetis
-      </button>
       <Card>
         <CardHeader>
           <CardTitle>My Profile</CardTitle>
@@ -159,13 +103,6 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
           tokenAddress={tokenAddress}
           tokenData={tokenData}
           nameDayTokenData={nameDayTokenData}
-          onMint={() => {
-            refetchBalance();
-            setRun(true);
-            // setTimeout(() => {
-            //   setRun(false);
-            // }, 2000);
-          }}
         />
       )}
       <Card className="col-span-2">
