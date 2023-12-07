@@ -31,6 +31,8 @@ import { nameDayTokenABI } from "@/namedaytoken-abi";
 
 import { toast } from "sonner";
 
+import Confetti from "react-confetti";
+
 interface MintProps {
   address: Address;
   tokenAddress: Address;
@@ -52,9 +54,6 @@ export const Mint = ({
   const [ensNames, setEnsNames] = useState<EnsName[]>([]);
 
   const { chain, chains } = useNetwork();
-
-  console.log(chain);
-  console.log(chains);
 
   const isDay = useIsDay(
     nameDayTokenData.tokenTimestamp * BigInt(1000),
@@ -110,31 +109,6 @@ export const Mint = ({
     address: tokenAddress,
     abi: nameDayTokenABI,
     functionName: "mint",
-    // onSuccess: () => {
-    //   console.log("success");
-    //   console.log(isMinting);
-    //   console.log(isMinted);
-    //   console.log(txBroadcasted?.hash);
-    //   toast.loading(
-    //     <div className="flex flex-col space-y-1">
-    //       <div>{"Minting..."}</div>
-    //       <a
-    //         href="youtube.com"
-    //         target="_blank"
-    //         className="flex flex-row items-center">
-    //         <ExternalLink className="h-[1.2rem] w-[1.2rem]" />
-    //         {txBroadcasted?.hash}
-    //       </a>
-    //     </div>,
-    //     {
-    //       style: {
-    //         background: "hsl(var(--background))",
-    //         borderColor: "gray",
-    //         color: "hsl(var(--foreground))",
-    //       },
-    //     }
-    //   );
-    // },
   });
 
   const { data, isError, isLoading } = useWaitForTransaction({
@@ -148,7 +122,6 @@ export const Mint = ({
   });
 
   useEffect(() => {
-    console.log(txBroadcasted?.hash);
     if (txBroadcasted?.hash) {
       setDialogOpen(false);
       toast.loading(
@@ -207,34 +180,10 @@ export const Mint = ({
               (hasMinted ? true : false) ||
               (ensName == undefined && !hasMinted)
             }
-            onClick={
-              () => {
-                console.log(ensName?.value);
-                write({
-                  args: [ensName?.value ?? ""],
-                });
-              }
-              // {
-              //   setDialogOpen(false);
-              //   toast.loading("Minting...\n\n tx: " + data?.hash);
-              //   toast.loading(
-              //     <div className="flex flex-col space-y-1">
-              //       <div>{"Minting..."}</div>
-              //       <a
-              //         href="youtube.com"
-              //         target="_blank"
-              //         className="flex flex-row items-center">
-              //         <ExternalLink className="h-[1.2rem] w-[1.2rem]" />
-              //         {"0x123" + data?.hash}
-              //       </a>
-              //     </div>
-              //   );
-              //   // toast.loading(<div>A custom toast with default styling</div>);
-
-              //   setTimeout(() => {
-              //     // toast.success("Minted!");
-              //   }, 2000);
-              // }
+            onClick={() =>
+              write({
+                args: [ensName?.value ?? ""],
+              })
             }>
             <BiCoin className="text-lg mr-1" />
             Mint
