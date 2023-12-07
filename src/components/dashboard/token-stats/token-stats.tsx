@@ -19,12 +19,20 @@ export const TokenStats = ({
   nameDayTokenData,
 }: TokenStatsProps) => {
   return (
-    <div>
-      <div className="font-medium md:text-lg">
+    <div className="font-medium md:text-lg">
+      <div>
         <span>Total supply: </span>
         <span>
           {tokenData.totalSupply.formatted}{" "}
           {" $" + nameDayTokenBalanceData.symbol}
+        </span>
+      </div>
+      <div>
+        <span>Creation date: </span>
+        <span>
+          {new Date(
+            Number(nameDayTokenData.tokenBaseTimestamp * BigInt(1000))
+          ).toDateString()}
         </span>
       </div>
       <Countdown

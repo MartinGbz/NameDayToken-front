@@ -59,28 +59,28 @@ export const Footer = () => {
             <Image
               src={farcasterIconWhite}
               alt={"farcaster icon"}
-              className="w-5 h-5 md:w-7 md:h-7"
+              className="w-5 h-5 md:w-6 md:h-6 mr-1"
             />
           )}
           {theme == "light" && (
             <Image
               src={farcasterIconBlack}
               alt={"farcaster icon"}
-              className="w-5 h-5 md:w-7 md:h-7"
+              className="w-5 h-5 md:w-6 md:h-6 mr-1"
             />
           )}
           {theme == "system" && systemTheme == "dark" && (
             <Image
               src={farcasterIconWhite}
               alt={"farcaster icon"}
-              className="w-5 h-5 md:w-7 md:h-7"
+              className="w-5 h-5 md:w-6 md:h-6 mr-1"
             />
           )}
           {theme == "system" && systemTheme == "light" && (
             <Image
               src={farcasterIconBlack}
               alt={"farcaster icon"}
-              className="w-5 h-5 md:w-7 md:h-7"
+              className="w-5 h-5 md:w-6 md:h-6 mr-1"
             />
           )}
           <p className="text-xs md:text-base"> martingbz </p>

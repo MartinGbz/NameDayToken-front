@@ -26,11 +26,10 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 
-import { nameDayTokenABI } from "@/namedaytoken-abi";
-
 import { toast } from "sonner";
-
 import ReactCanvasConfetti from "react-canvas-confetti";
+
+import { nameDayTokenABI } from "@/namedaytoken-abi";
 
 interface MintProps {
   address: Address;
