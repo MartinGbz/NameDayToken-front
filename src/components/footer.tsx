@@ -14,13 +14,13 @@ export const Footer = () => {
 
   return (
     <footer className="w-screen flex flex-row justify-between items-center p-4 text-gray-700 dark:text-gray-200 font-semibold">
-      <a href="https://twitter.com/0xMartinGbz">
+      <a href="https://twitter.com/0xMartinGbz" target="_blank">
         <div className="flex items-center">
           <FaXTwitter className="text-black dark:text-white w-4 h-4 md:w-5 md:h-5 mr-1" />
           <p className="text-xs md:text-base"> 0xMartinGbz </p>
         </div>
       </a>
-      <a href="https://hey.xyz/u/martingbz">
+      <a href="https://hey.xyz/u/martingbz" target="_blank">
         <div className="flex items-center">
           {theme == "dark" && (
             <Image
@@ -53,7 +53,7 @@ export const Footer = () => {
           <p className="text-xs md:text-base"> martingbz.lens </p>
         </div>
       </a>
-      <a href="https://warpcast.com/martingbz">
+      <a href="https://warpcast.com/martingbz" target="_blank">
         <div className="flex items-center">
           {theme == "dark" && (
             <Image
@@ -86,7 +86,9 @@ export const Footer = () => {
           <p className="text-xs md:text-base"> martingbz </p>
         </div>
       </a>
-      <IoLogoGithub className="text-black dark:text-white w-4 h-4 md:w-7 md:h-7" />
+      <a href="https://github.com/MartinGbz/NameDayToken-front" target="_blank">
+        <IoLogoGithub className="text-black dark:text-white w-4 h-4 md:w-7 md:h-7" />
+      </a>
     </footer>
   );
 };
