@@ -6,12 +6,20 @@ import {
   NameDayTokenData,
 } from "@/types";
 import { Countdown } from "./countdown";
+import { use, useEffect, useState } from "react";
 
 interface TokenStatsProps {
   tokenData: FetchTokenResult;
   nameDayTokenBalanceData: FetchBalanceResult;
   nameDayTokenData: NameDayTokenData;
 }
+
+const getShortnedDate = (timestampInSecond: bigint) => {
+  const date = new Date(Number(timestampInSecond * BigInt(1000)));
+  const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+  const month = date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth();
+  return day + "/" + month + "/" + date.getFullYear();
+};
 
 export const TokenStats = ({
   tokenData,
@@ -27,12 +35,14 @@ export const TokenStats = ({
           {" $" + nameDayTokenBalanceData.symbol}
         </span>
       </div>
-      <div>
+      <div className="mb-2">
         <span>Creation date: </span>
+        <span>{getShortnedDate(nameDayTokenData.tokenBaseTimestamp)}</span>
+      </div>
+      <div>
+        <span>Name day: </span>
         <span>
-          {new Date(
-            Number(nameDayTokenData.tokenBaseTimestamp * BigInt(1000))
-          ).toDateString()}
+          {getShortnedDate(nameDayTokenData.tokenTimestamp).slice(0, -5)}
         </span>
       </div>
       <Countdown

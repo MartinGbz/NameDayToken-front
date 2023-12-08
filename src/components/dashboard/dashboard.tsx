@@ -43,6 +43,7 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
     data: tokenData,
     isError: isTokenError,
     isLoading: isTokenLoading,
+    refetch: refetchTokenData,
   } = useToken({
     address: tokenAddress,
   });
@@ -61,7 +62,7 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
       {
         address: tokenAddress,
         abi: nameDayTokenABI,
-        functionName: "getBaseTimestamp",
+        functionName: "baseTimestamp",
       } as const,
       {
         address: tokenAddress,
@@ -103,6 +104,10 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
           tokenAddress={tokenAddress}
           tokenData={tokenData}
           nameDayTokenData={nameDayTokenData}
+          balanceHasToBeRefreshed={() => {
+            refetchBalance();
+            refetchTokenData();
+          }}
         />
       )}
       <Card className="col-span-2">

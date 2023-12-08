@@ -36,6 +36,7 @@ interface MintProps {
   tokenAddress: Address;
   tokenData: FetchTokenResult;
   nameDayTokenData: NameDayTokenData;
+  balanceHasToBeRefreshed(): void;
 }
 
 export const Mint = ({
@@ -43,6 +44,7 @@ export const Mint = ({
   tokenAddress,
   tokenData,
   nameDayTokenData,
+  balanceHasToBeRefreshed,
 }: MintProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [confettisRun, setConfettisRun] = useState<boolean>(false);
@@ -113,6 +115,7 @@ export const Mint = ({
     onSuccess(data) {
       if (data.status == "success") {
         toast.success("Minted!");
+        balanceHasToBeRefreshed();
         setConfettisRun(true);
       }
     },
