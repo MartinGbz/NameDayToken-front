@@ -9,14 +9,6 @@ import { IoLogoGithub } from "react-icons/io5";
 import { FaXTwitter } from "react-icons/fa6";
 import { ExternalLink, Share2 } from "lucide-react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -24,10 +16,8 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FetchTokenResult } from "@/types";
@@ -38,6 +28,7 @@ interface MintedDialogProps {
   mintPerUserPerYear: bigint;
   tokenData: FetchTokenResult;
   setDialogMintedOpen: (open: boolean) => void;
+  txUrl?: string;
 }
 
 export function MintedDialog({
@@ -45,31 +36,14 @@ export function MintedDialog({
   mintPerUserPerYear,
   tokenData,
   setDialogMintedOpen,
+  txUrl,
 }: MintedDialogProps) {
-  // const [dialogMintedOpen, setDialogMintedOpen] = useState(true);
-
-  // useEffect(() => {
-  //   setDialogMintedOpen(open);
-  // }, [open]);
-
-  // useEffect(() => {
-  //   open = dialogMintedOpen;
-  // }, [dialogMintedOpen]);
-
   return (
     <Dialog open={open} onOpenChange={setDialogMintedOpen}>
-      {/* <DialogOverlay className="fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" /> */}
       <DialogContent hasBackground={false}>
         <DialogHeader>
           <DialogTitle className="text-center mb-7">Congrats! 🎉</DialogTitle>
           <span className="text-center text-8xl">🥳</span>
-          {/* {mintPerUserPerYear !== undefined && (
-          <DialogDescription>
-            You successfully minted{" "}
-            {Number(BigInt(mintPerUserPerYear) / BigInt(10 ** 18))} $
-            {tokenData.symbol}
-          </DialogDescription>
-        )} */}
         </DialogHeader>
 
         <div className="text-center">
@@ -78,38 +52,14 @@ export function MintedDialog({
             {Number(BigInt(mintPerUserPerYear) / BigInt(10 ** 18))}
           </span>{" "}
           ${tokenData.symbol}
-          {/* {chain?.blockExplorers && txBroadcasted && (
-        <a
-          href={
-            chain.blockExplorers.default.url + "/tx/" + txBroadcasted.hash
-          }
-          target="_blank"
-          className="flex flex-row items-center">
-          <ExternalLink className="h-[1.2rem] w-[1.2rem]" />
-          tx
-        </a>
-      )} */}
-          {/* <a
-            href={
-              "https://etherscan.io/" + "/tx/" + "0x12345678910111213141516"
-            }
-            target="_blank"
-            className="	 w-fit h-fit">
-            <ExternalLink className="inline h-[1.2rem] w-[1.2rem] mb-1 ml-4" />
-            tx
-          </a>
-        </div> */}
-          <div className="flex	justify-center">
-            <a
-              href={
-                "https://etherscan.io/" + "/tx/" + "0x12345678910111213141516"
-              }
-              target="_blank"
-              className="w-fit h-fit">
-              <ExternalLink className="inline h-[1.2rem] w-[1.2rem]" />
-              tx
-            </a>
-          </div>
+          {txUrl && (
+            <div className="flex justify-center">
+              <a href={txUrl} target="_blank" className="w-fit h-fit">
+                <ExternalLink className="inline h-[1.2rem] w-[1.2rem]" />
+                tx
+              </a>
+            </div>
+          )}
         </div>
 
         <Popover>

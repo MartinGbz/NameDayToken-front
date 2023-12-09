@@ -19,7 +19,6 @@ import { TokenStats } from "./token-stats/token-stats";
 import { Mint } from "./mint/mint";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
-import { useState } from "react";
 
 interface DashboardProps {
   tokenAddress: Address;
@@ -27,7 +26,6 @@ interface DashboardProps {
 }
 
 export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
-  const [dialogOpen, setDialogOpen] = useState(false);
   const { address, isConnected } = useAccount();
 
   const {
@@ -109,7 +107,6 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
           tokensMinted={() => {
             refetchBalance();
             refetchTokenData();
-            setDialogOpen(true);
           }}
         />
       )}
