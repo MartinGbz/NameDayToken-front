@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { BiCoin } from "react-icons/bi";
 import { EnsName, FetchTokenResult, NameDayTokenData } from "@/types";
 import { Address } from "viem";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Share2 } from "lucide-react";
 
 import {
   Dialog,
@@ -31,12 +31,34 @@ import ReactCanvasConfetti from "react-canvas-confetti";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
 
+import Image from "next/image";
+import lensIconBlack from "@/medias/icons/lens-icon-T-Black.svg";
+import lensIconWhite from "@/medias/icons/lens-icon-T-White.svg";
+import farcasterIconWhite from "@/medias/icons/farcaster-icon-white.svg";
+import farcasterIconBlack from "@/medias/icons/farcaster-icon-black.svg";
+import { IoLogoGithub } from "react-icons/io5";
+import { FaXTwitter } from "react-icons/fa6";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { MintedDialog } from "./minted-dialog";
+
 interface MintProps {
   address: Address;
   tokenAddress: Address;
   tokenData: FetchTokenResult;
   nameDayTokenData: NameDayTokenData;
-  balanceHasToBeRefreshed(): void;
+  tokensMinted(): void;
 }
 
 export const Mint = ({
@@ -44,9 +66,10 @@ export const Mint = ({
   tokenAddress,
   tokenData,
   nameDayTokenData,
-  balanceHasToBeRefreshed,
+  tokensMinted,
 }: MintProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMintedOpen, setDialogMintedOpen] = useState(false);
   const [confettisRun, setConfettisRun] = useState<boolean>(false);
 
   const [ensName, setEnsName] = useState<EnsName>();
@@ -115,7 +138,8 @@ export const Mint = ({
     onSuccess(data) {
       if (data.status == "success") {
         toast.success("Minted!");
-        balanceHasToBeRefreshed();
+        tokensMinted();
+        setDialogMintedOpen(true);
         setConfettisRun(true);
       }
     },
@@ -148,6 +172,10 @@ export const Mint = ({
       setConfettisRun(false);
     }
   }, [confettisRun]);
+
+  setTimeout(() => {
+    setDialogMintedOpen(true);
+  }, 2000);
 
   return (
     <div className="relative flex items-center justify-center flex-col">
@@ -212,6 +240,14 @@ export const Mint = ({
           </Button>
         </DialogContent>
       </Dialog>
+      {mintPerUserPerYear !== undefined && (
+        <MintedDialog
+          open={dialogMintedOpen}
+          setDialogMintedOpen={setDialogMintedOpen}
+          mintPerUserPerYear={mintPerUserPerYear}
+          tokenData={tokenData}
+        />
+      )}
     </div>
   );
 };
