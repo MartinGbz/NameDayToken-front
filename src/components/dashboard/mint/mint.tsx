@@ -220,11 +220,15 @@ export const Mint = ({
         <MintedDialog
           open={dialogMintedOpen}
           setDialogMintedOpen={setDialogMintedOpen}
-          mintPerUserPerYear={mintPerUserPerYear}
+          mintPerUserPerYear={Number(
+            BigInt(mintPerUserPerYear) / BigInt(10 ** 18)
+          )}
           tokenData={tokenData}
           txUrl={
-            chain?.blockExplorers && txBroadcasted
-              ? chain.blockExplorers.default.url + "/tx/" + txBroadcasted.hash
+            chain?.blockExplorers?.etherscan?.url && txBroadcasted
+              ? chain.blockExplorers.etherscan?.url +
+                "/tx/" +
+                txBroadcasted.hash
               : undefined
           }
         />
