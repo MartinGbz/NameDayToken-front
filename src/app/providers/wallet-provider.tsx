@@ -8,14 +8,14 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { sepolia, base } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { useTheme } from "next-themes";
 
 const chainsSupported = [sepolia];
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
 
   const { chains, publicClient } = configureChains(chainsSupported, [
     publicProvider(),
@@ -38,7 +38,11 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
       <RainbowKitProvider
         chains={chains}
         initialChain={chainsSupported[0]}
-        theme={theme == "dark" ? darkTheme() : lightTheme()}>
+        theme={
+          theme == "dark" || (theme == "system" && systemTheme == "dark")
+            ? darkTheme()
+            : lightTheme()
+        }>
         {children}
       </RainbowKitProvider>
     </WagmiConfig>
