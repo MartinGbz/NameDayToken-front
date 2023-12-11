@@ -1,5 +1,5 @@
 <div align="center"> 
-  <h1> NameDayToken 📅 - Frontend</h1>
+  <h1> NameDayToken 🥳 - Frontend</h1>
   <p>A frontend to interact with <a href="https://github.com/MartinGbz/NameDayToken">NameDayTokens</a></p>
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/0xMartinGbz?style=social)](https://twitter.com/0xMartinGbz)
