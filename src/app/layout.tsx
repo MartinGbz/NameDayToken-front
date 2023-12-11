@@ -22,12 +22,12 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
-          <Toaster richColors />
           <div className="h-screen w-screen flex flex-col justify-between text-black dark:text-white">
             <Header />
             {children}
             <Footer />
           </div>
+          <Toaster richColors />
         </Providers>
       </body>
     </html>
