@@ -1,16 +1,10 @@
 "use client";
 
-import {
-  FetchBalanceResult,
-  FetchTokenResult,
-  NameDayTokenData,
-} from "@/types";
+import { FetchTokenResult, NameDayTokenData } from "@/types";
 import { Countdown } from "./countdown";
-import { use, useEffect, useState } from "react";
 
 interface TokenStatsProps {
   tokenData: FetchTokenResult;
-  nameDayTokenBalanceData: FetchBalanceResult;
   nameDayTokenData: NameDayTokenData;
 }
 
@@ -23,7 +17,6 @@ const getShortnedDate = (timestampInSecond: bigint) => {
 
 export const TokenStats = ({
   tokenData,
-  nameDayTokenBalanceData,
   nameDayTokenData,
 }: TokenStatsProps) => {
   return (
@@ -31,8 +24,7 @@ export const TokenStats = ({
       <div>
         <span>Total supply: </span>
         <span>
-          {tokenData.totalSupply.formatted}{" "}
-          {" $" + nameDayTokenBalanceData.symbol}
+          {tokenData.totalSupply.formatted} {" $" + tokenData.symbol}
         </span>
       </div>
       <div className="mb-2">

@@ -22,10 +22,9 @@ import { nameDayTokenABI } from "@/namedaytoken-abi";
 
 interface DashboardProps {
   tokenAddress: Address;
-  chainId: number;
 }
 
-export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
+export const Dashboard = ({ tokenAddress }: DashboardProps) => {
   const { address, isConnected } = useAccount();
 
   const {
@@ -36,7 +35,6 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
   } = useBalance({
     address: address,
     token: tokenAddress,
-    chainId: chainId,
   });
 
   const {
@@ -83,21 +81,23 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
 
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>My Profile</CardTitle>
-          <CardDescription>Your profile infos</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="font-medium md:text-lg">
-            <span>My Balance: </span>
-            <span className="text-green-500">
-              {tokenBalanceData?.formatted.substring(0, 6)}
-            </span>
-            <span>{" $" + tokenBalanceData?.symbol}</span>
-          </div>
-        </CardContent>
-      </Card>
+      {tokenBalanceData && (
+        <Card>
+          <CardHeader>
+            <CardTitle>My Profile</CardTitle>
+            <CardDescription>Your profile infos</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="font-medium md:text-lg">
+              <span>My Balance: </span>
+              <span className="text-green-500">
+                {tokenBalanceData.formatted.substring(0, 6)}
+              </span>
+              <span>{" $" + tokenBalanceData.symbol}</span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       {address && nameDayTokenData && tokenData && (
         <Mint
           address={address}
@@ -110,16 +110,20 @@ export const Dashboard = ({ tokenAddress, chainId }: DashboardProps) => {
           }}
         />
       )}
+      {!address && !tokenBalanceData && (
+        <Card className="col-span-2 text-base md:text-xl py-6 pl-6">
+          <span>Connect your wallet to mint tokens</span>
+        </Card>
+      )}
       <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Token infos</CardTitle>
           <CardDescription>Token stats</CardDescription>
         </CardHeader>
         <CardContent>
-          {tokenData && tokenBalanceData && nameDayTokenData && (
+          {tokenData && nameDayTokenData && (
             <TokenStats
               tokenData={tokenData}
-              nameDayTokenBalanceData={tokenBalanceData}
               nameDayTokenData={nameDayTokenData}
             />
           )}

@@ -8,7 +8,7 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { sepolia } from "wagmi/chains";
+import { sepolia, base } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { useTheme } from "next-themes";
 
