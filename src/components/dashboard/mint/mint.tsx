@@ -20,9 +20,12 @@ import { useEns } from "@/hooks/use-ens";
 import { EnsNamesCombobox } from "./ens-names-combobox";
 import { use, useEffect, useState } from "react";
 import {
+  sepolia,
   useContractRead,
   useContractWrite,
   useNetwork,
+  usePrepareContractWrite,
+  useSwitchNetwork,
   useWaitForTransaction,
 } from "wagmi";
 
@@ -109,10 +112,15 @@ export const Mint = ({
     }
   }, [ensName, hasMintedRefetch]);
 
-  const { data: txBroadcasted, write } = useContractWrite({
+  const {
+    data: txBroadcasted,
+    write,
+    error: writeError,
+  } = useContractWrite({
     address: tokenAddress,
     abi: nameDayTokenABI,
     functionName: "mint",
+    chainId: sepolia.id,
   });
 
   const { data, isError, isLoading } = useWaitForTransaction({
@@ -126,6 +134,12 @@ export const Mint = ({
       }
     },
   });
+
+  useEffect(() => {
+    if (confettisRun) {
+      setTimeout(() => setConfettisRun(false), 2000);
+    }
+  }, [confettisRun]);
 
   useEffect(() => {
     if (txBroadcasted?.hash) {
@@ -149,11 +163,14 @@ export const Mint = ({
     }
   }, [chain?.blockExplorers, txBroadcasted?.hash]);
 
+  const { switchNetwork } = useSwitchNetwork({ chainId: sepolia.id });
+
   useEffect(() => {
-    if (confettisRun) {
-      setTimeout(() => setConfettisRun(false), 2000);
+    if (writeError?.name === "ChainMismatchError") {
+      toast.error("Wrong network");
+      switchNetwork?.();
     }
-  }, [confettisRun]);
+  }, [writeError]);
 
   return (
     <div className="relative flex items-center justify-center flex-col">
