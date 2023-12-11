@@ -10,7 +10,6 @@ import { Address } from "viem";
 export default function Home() {
   const [token, setToken] = useState<Address | undefined>();
   const { chain } = useNetwork();
-
   const queryClient = new QueryClient();
 
   return (

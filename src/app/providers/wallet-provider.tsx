@@ -8,18 +8,20 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-// import { sepolia } from "wagmi/chains";
-import { foundry } from "wagmi/chains";
-import { sepolia } from "./chains/sepolia";
-import { publicProvider } from "wagmi/providers/public";
+import { sepolia } from "wagmi/chains";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { useTheme } from "next-themes";
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const { theme } = useTheme();
 
   const { chains, publicClient } = configureChains(
-    [sepolia, foundry],
-    [publicProvider()]
+    [sepolia],
+    [
+      jsonRpcProvider({
+        rpc: (chain) => ({ http: "https://ethereum-sepolia.publicnode.com" }),
+      }),
+    ]
   );
 
   const { connectors } = getDefaultWallets({
@@ -38,6 +40,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider
         chains={chains}
+        initialChain={sepolia}
         theme={theme == "dark" ? darkTheme() : lightTheme()}>
         {children}
       </RainbowKitProvider>

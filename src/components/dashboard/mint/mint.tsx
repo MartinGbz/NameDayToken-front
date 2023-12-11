@@ -88,7 +88,8 @@ export const Mint = ({
   const { data: EnsOwnedByAccount } = useEns(address);
 
   useEffect(() => {
-    if (!EnsOwnedByAccount) return;
+    if (!EnsOwnedByAccount || !EnsOwnedByAccount.account) return;
+    console.log(EnsOwnedByAccount);
     const ensNames = EnsOwnedByAccount.account.wrappedDomains
       .map((wrappedDomain) => {
         return {
