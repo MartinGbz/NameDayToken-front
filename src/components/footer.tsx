@@ -22,28 +22,13 @@ export const Footer = () => {
       </a>
       <a href="https://hey.xyz/u/martingbz" target="_blank">
         <div className="flex items-center">
-          {theme == "dark" && (
+          {theme == "dark" || (theme == "system" && systemTheme == "dark") ? (
             <Image
               src={lensIconWhite}
               alt={"lens icon"}
               className="w-7 h-7 md:w-9 md:h-9"
             />
-          )}
-          {theme == "light" && (
-            <Image
-              src={lensIconBlack}
-              alt={"lens icon"}
-              className="w-7 h-7 md:w-9 md:h-9"
-            />
-          )}
-          {theme == "system" && systemTheme == "dark" && (
-            <Image
-              src={lensIconWhite}
-              alt={"lens icon"}
-              className="w-7 h-7 md:w-9 md:h-9"
-            />
-          )}
-          {theme == "system" && systemTheme == "light" && (
+          ) : (
             <Image
               src={lensIconBlack}
               alt={"lens icon"}
@@ -55,28 +40,13 @@ export const Footer = () => {
       </a>
       <a href="https://warpcast.com/martingbz" target="_blank">
         <div className="flex items-center">
-          {theme == "dark" && (
+          {theme == "dark" || (theme == "system" && systemTheme == "dark") ? (
             <Image
               src={farcasterIconWhite}
               alt={"farcaster icon"}
               className="w-5 h-5 md:w-6 md:h-6 mr-1"
             />
-          )}
-          {theme == "light" && (
-            <Image
-              src={farcasterIconBlack}
-              alt={"farcaster icon"}
-              className="w-5 h-5 md:w-6 md:h-6 mr-1"
-            />
-          )}
-          {theme == "system" && systemTheme == "dark" && (
-            <Image
-              src={farcasterIconWhite}
-              alt={"farcaster icon"}
-              className="w-5 h-5 md:w-6 md:h-6 mr-1"
-            />
-          )}
-          {theme == "system" && systemTheme == "light" && (
+          ) : (
             <Image
               src={farcasterIconBlack}
               alt={"farcaster icon"}
