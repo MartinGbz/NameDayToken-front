@@ -9,20 +9,17 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { publicProvider } from "wagmi/providers/public";
 import { useTheme } from "next-themes";
+
+const chainsSupported = [sepolia];
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const { theme } = useTheme();
 
-  const { chains, publicClient } = configureChains(
-    [sepolia],
-    [
-      jsonRpcProvider({
-        rpc: (chain) => ({ http: "https://ethereum-sepolia.publicnode.com" }),
-      }),
-    ]
-  );
+  const { chains, publicClient } = configureChains(chainsSupported, [
+    publicProvider(),
+  ]);
 
   const { connectors } = getDefaultWallets({
     appName: "NameDayToken",
@@ -40,7 +37,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider
         chains={chains}
-        initialChain={sepolia}
+        initialChain={chainsSupported[0]}
         theme={theme == "dark" ? darkTheme() : lightTheme()}>
         {children}
       </RainbowKitProvider>

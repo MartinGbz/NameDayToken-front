@@ -1,9 +1,10 @@
 import { EnsNamesData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
-import { Address } from "viem";
+import { Address, Chain } from "viem";
+import { sepolia } from "wagmi";
 
-export const useEns = (address: Address) => {
+export const useEns = (address: Address, network?: Chain) => {
   const getAllEnsNames = gql`
     query getNames($id: ID!) {
       account(id: $id) {
@@ -22,7 +23,9 @@ export const useEns = (address: Address) => {
     queryKey: ["ensNames"],
     queryFn: async () =>
       request(
-        "https://api.studio.thegraph.com/query/49574/enssepolia/version/latest",
+        network?.id === sepolia.id
+          ? "https://api.studio.thegraph.com/query/49574/enssepolia/version/latest"
+          : "https://api.thegraph.com/subgraphs/name/ensdomains/ens",
         getAllEnsNames,
         { id: address.toLowerCase() }
       ),

@@ -18,13 +18,11 @@ import { Label } from "@/components/ui/label";
 import { useIsDay } from "@/hooks/use-is-day";
 import { useEns } from "@/hooks/use-ens";
 import { EnsNamesCombobox } from "./ens-names-combobox";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  sepolia,
   useContractRead,
   useContractWrite,
   useNetwork,
-  usePrepareContractWrite,
   useSwitchNetwork,
   useWaitForTransaction,
 } from "wagmi";
@@ -89,11 +87,10 @@ export const Mint = ({
     enabled: false,
   });
 
-  const { data: EnsOwnedByAccount } = useEns(address);
+  const { data: EnsOwnedByAccount } = useEns(address, chain);
 
   useEffect(() => {
     if (!EnsOwnedByAccount || !EnsOwnedByAccount.account) return;
-    console.log(EnsOwnedByAccount);
     const ensNames = EnsOwnedByAccount.account.wrappedDomains
       .map((wrappedDomain) => {
         return {
@@ -120,7 +117,7 @@ export const Mint = ({
     address: tokenAddress,
     abi: nameDayTokenABI,
     functionName: "mint",
-    chainId: sepolia.id,
+    chainId: chains.find((c) => c.id === chain?.id)?.id ?? chains[0].id,
   });
 
   const { data, isError, isLoading } = useWaitForTransaction({
@@ -163,7 +160,7 @@ export const Mint = ({
     }
   }, [chain?.blockExplorers, txBroadcasted?.hash]);
 
-  const { switchNetwork } = useSwitchNetwork({ chainId: sepolia.id });
+  const { switchNetwork } = useSwitchNetwork({ chainId: chains[0].id });
 
   useEffect(() => {
     if (writeError?.name === "ChainMismatchError") {
