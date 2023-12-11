@@ -27,11 +27,12 @@ import {
 } from "wagmi";
 
 import { toast } from "sonner";
-import ReactCanvasConfetti from "react-canvas-confetti";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
 
 import { MintedDialog } from "./minted-dialog";
+
+import Confetti from "react-confetti";
 
 interface MintProps {
   address: Address;
@@ -150,27 +151,23 @@ export const Mint = ({
 
   useEffect(() => {
     if (confettisRun) {
-      setConfettisRun(false);
+      setTimeout(() => setConfettisRun(false), 2000);
     }
   }, [confettisRun]);
 
   return (
     <div className="relative flex items-center justify-center flex-col">
-      <ReactCanvasConfetti
+      <Confetti
         style={{
           position: "fixed",
           top: 0,
           left: 0,
-          pointerEvents: "none",
           width: "100%",
           height: "100%",
         }}
-        particleCount={150}
-        spread={120}
-        ticks={300}
-        startVelocity={90}
-        fire={confettisRun}
-        origin={{ x: 0.5, y: 0.7 }}
+        initialVelocityY={100}
+        gravity={0.1}
+        numberOfPieces={confettisRun ? 500 : 0}
       />
       {isDay && (
         <div className="absolute top-0 flex items-center space-x-1 p-1 border-2 border-red-400 rounded">
