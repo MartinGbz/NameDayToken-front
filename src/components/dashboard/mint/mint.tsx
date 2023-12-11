@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { useIsDay } from "@/hooks/use-is-day";
 import { useEns } from "@/hooks/use-ens";
 import { EnsNamesCombobox } from "./ens-names-combobox";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   useContractRead,
   useContractWrite,
@@ -141,7 +141,7 @@ export const Mint = ({
               target="_blank"
               className="flex flex-row items-center">
               <ExternalLink className="h-[1.2rem] w-[1.2rem]" />
-              {txBroadcasted?.hash}
+              {txBroadcasted.hash.slice(0, 30)}
             </a>
           )}
         </div>
