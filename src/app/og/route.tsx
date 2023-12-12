@@ -43,7 +43,7 @@ export async function GET() {
             fontSize: 40,
           }}>
           {
-            "The ERC-20 token only mintable by the name owners during its name day"
+            "The ERC-20 token only mintable by the name owners during the name day"
           }
         </div>
       </div>
