@@ -52,7 +52,19 @@ export function getPreviousAndNextTimestamp(
         nameDayDate,
         currentDate.getFullYear()
       );
-      previousNameDayTimestamp = nameDayBaseTimestamp;
+      const nameDayBaseYear = new Date(
+        Number(nameDayBaseTimestamp)
+      ).getFullYear();
+
+      // if we are in the year of the token deployment, we need to use the previous year
+      if (currentDate.getFullYear() == nameDayBaseYear) {
+        previousNameDayTimestamp = getDateFromOtherDate(
+          nameDayDate,
+          nameDayBaseYear - 1
+        );
+      } else {
+        previousNameDayTimestamp = nameDayBaseTimestamp;
+      }
     } else {
       nextNameDayTimestamp = getDateFromOtherDate(
         nameDayDate,
