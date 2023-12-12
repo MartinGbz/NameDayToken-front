@@ -21,11 +21,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { FetchTokenResult } from "@/types";
 import { useTheme } from "next-themes";
+import { useRef } from "react";
 
-export const preWrittenPostXSlug = "http://twitter.com/intent/tweet?text=";
-export const preWrittenPostLensSlug = "https://lenster.xyz/?text=";
-export const preWrittenPostFarcasterSlug =
-  "https://warpcast.com/~/compose?text=";
+const preWrittenPostXSlug = "http://twitter.com/intent/tweet?text=";
+const preWrittenPostHeyLensSlug = "https://lenster.xyz/?text=";
+const preWrittenPostFarcasterSlug = "https://warpcast.com/~/compose?text=";
+
+const authorXHandle = "0xMartinGbz";
+const authorLensHandle = "lens/martingbz";
+const authorFarcasterHandle = "martingbz";
+
+const link = "https://name-day-token.vercel.app/";
 
 interface MintedDialogProps {
   open: boolean;
@@ -43,6 +49,16 @@ export function MintedDialog({
   txUrl,
 }: MintedDialogProps) {
   const { theme, systemTheme } = useTheme();
+
+  const baseMessage = useRef(
+    "I%27ve+just+minted+" +
+      mintPerUserPerYear +
+      "+%24" +
+      tokenData.symbol +
+      "+tokens+on+" +
+      link +
+      "+%F0%9F%A5%B3%0D%0ABy.+%40"
+  );
 
   return (
     <Dialog open={open} onOpenChange={setDialogMintedOpen}>
@@ -74,25 +90,15 @@ export function MintedDialog({
           <PopoverContent className="w-fit">
             <div className="flex flex-row items-center gap-4">
               <a
-                href={
-                  preWrittenPostXSlug +
-                  "I%27ve+just+minted+" +
-                  mintPerUserPerYear +
-                  "+%24" +
-                  tokenData.symbol +
-                  "+tokens+on+namedaytoken.vercel.app+%F0%9F%A5%B3"
-                }
+                href={preWrittenPostXSlug + baseMessage.current + authorXHandle}
                 target="_blank">
                 <FaXTwitter className="text-black dark:text-white w-4 h-4 md:w-5 md:h-5 mr-1" />
               </a>
               <a
                 href={
-                  preWrittenPostLensSlug +
-                  "I%27ve+just+minted+" +
-                  mintPerUserPerYear +
-                  "+%24" +
-                  tokenData.symbol +
-                  "+tokens+on+namedaytoken.vercel.app+%F0%9F%A5%B3"
+                  preWrittenPostHeyLensSlug +
+                  baseMessage.current +
+                  authorLensHandle
                 }
                 target="_blank">
                 {theme == "dark" ||
@@ -113,11 +119,8 @@ export function MintedDialog({
               <a
                 href={
                   preWrittenPostFarcasterSlug +
-                  "I%27ve+just+minted+" +
-                  mintPerUserPerYear +
-                  "+%24" +
-                  tokenData.symbol +
-                  "+tokens+on+namedaytoken.vercel.app+%F0%9F%A5%B3"
+                  baseMessage.current +
+                  authorFarcasterHandle
                 }
                 target="_blank">
                 {theme == "dark" ||
