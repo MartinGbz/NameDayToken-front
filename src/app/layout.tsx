@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     creator: "@0xMartinGbz",
     images: [WEBSITE_DOMAIN + "/og"],
   },
+  metadataBase: new URL(WEBSITE_DOMAIN ?? "http://localhost:3000"),
 };
 
 export default async function RootLayout({
