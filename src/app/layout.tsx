@@ -8,9 +8,28 @@ import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const WEBSITE_DOMAIN = "https://name-day-token.vercel.app";
+
 export const metadata: Metadata = {
   title: "NameDayToken",
   description: "Mint your NameDayToken",
+  openGraph: {
+    title: "NameDayToken",
+    description: "Mint your NameDayToken",
+    type: "website",
+    images: [
+      {
+        url: WEBSITE_DOMAIN + "/og",
+      },
+    ],
+    url: WEBSITE_DOMAIN,
+  },
+  twitter: {
+    title: "NameDayToken",
+    description: "Mint your NameDayToken",
+    creator: "@0xMartinGbz",
+    images: [WEBSITE_DOMAIN + "/og"],
+  },
 };
 
 export default async function RootLayout({
