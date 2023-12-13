@@ -226,9 +226,7 @@ export const Mint = ({
                 className="text-sm text-green-500 font-bold w-fit h-fit">
                 <div className="flex flex-row items-center">
                   <ExternalLink className="inline h-[0.875rem] w-[0.875rem] mr-1" />
-                  <div>
-                    <span> Get an ENS </span>
-                  </div>
+                  <span> Get an ENS </span>
                 </div>
               </a>
             </Label>

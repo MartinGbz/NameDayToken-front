@@ -67,17 +67,21 @@ export function MintedDialog({
           <DialogTitle className="text-center mb-7">Congrats! 🎉</DialogTitle>
           <span className="text-center text-8xl">🥳</span>
         </DialogHeader>
-        <div className="text-center">
-          You successfully minted{" "}
-          <span className="text-green-500">{mintPerUserPerYear}</span> $
-          {tokenData.symbol}
+        <div className="flex flex-col items-center">
+          <div>
+            {" "}
+            You successfully minted{" "}
+            <span className="text-green-500">{mintPerUserPerYear}</span> $
+            {tokenData.symbol}
+          </div>
           {txUrl && (
-            <div className="flex justify-center">
-              <a href={txUrl} target="_blank" className="w-fit h-fit">
-                <ExternalLink className="inline h-[1.2rem] w-[1.2rem]" />
-                tx
-              </a>
-            </div>
+            <a
+              href={txUrl}
+              target="_blank"
+              className="w-fit h-fit flex flex-row items-center">
+              <ExternalLink className="inline h-[1.2rem] w-[1.2rem]" />
+              tx
+            </a>
           )}
         </div>
         <Popover>
