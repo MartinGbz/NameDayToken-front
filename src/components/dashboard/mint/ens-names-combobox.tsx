@@ -36,6 +36,7 @@ export function EnsNamesCombobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          disabled={ensName == undefined}
           variant="outline"
           role="combobox"
           aria-expanded={open}

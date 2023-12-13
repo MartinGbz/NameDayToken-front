@@ -212,11 +212,30 @@ export const Mint = ({
             ensNames={ensNames}
             onChange={(ensName) => setEnsName(ensName)}
           />
+          {ensName == undefined && (
+            <Label className="text-red-500">
+              {"You don't have any"}
+              <span className="text-green-500">
+                {" "}
+                {"*" + nameDayTokenData.dayName + "*.eth"}{" "}
+              </span>
+              {"ENS names."}
+              <a
+                href={"https://app.ens.domains/"}
+                target="_blank"
+                className="text-sm text-green-500 font-bold w-fit h-fit">
+                <div className="flex flex-row items-center">
+                  <ExternalLink className="inline h-[0.875rem] w-[0.875rem] mr-1" />
+                  <div>
+                    <span> Get an ENS </span>
+                  </div>
+                </div>
+              </a>
+            </Label>
+          )}
           <Button
             disabled={
-              !isDay ||
-              (hasMinted ? true : false) ||
-              (ensName == undefined && !hasMinted)
+              (hasMinted ? true : false) || (ensName == undefined && !hasMinted)
             }
             onClick={() =>
               write({
