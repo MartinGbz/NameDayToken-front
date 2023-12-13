@@ -152,7 +152,7 @@ export const Mint = ({
               target="_blank"
               className="flex flex-row items-center">
               <ExternalLink className="h-[1.2rem] w-[1.2rem]" />
-              {txBroadcasted.hash.slice(0, 30)}
+              {txBroadcasted.hash.slice(0, 30) + "..."}
             </a>
           )}
         </div>
@@ -198,7 +198,7 @@ export const Mint = ({
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Mint {tokenData.name}</DialogTitle>
+            <DialogTitle>Mint {tokenData.name}s</DialogTitle>
             {mintPerUserPerYear !== undefined && (
               <DialogDescription>
                 Choose an ENS and mint your yearly{" "}
@@ -229,6 +229,14 @@ export const Mint = ({
                   <span> Get an ENS </span>
                 </div>
               </a>
+            </Label>
+          )}
+          {hasMinted && (
+            <Label className="text-red-500">
+              {"You have already minted " +
+                tokenData.name +
+                "s" +
+                " using this ENS this year."}
             </Label>
           )}
           <Button
