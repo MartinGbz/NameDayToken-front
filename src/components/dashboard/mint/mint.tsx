@@ -167,7 +167,7 @@ export const Mint = ({
       toast.error("Wrong network");
       switchNetwork?.();
     }
-  }, [writeError]);
+  }, [switchNetwork, writeError]);
 
   return (
     <div className="relative flex items-center justify-center flex-col">

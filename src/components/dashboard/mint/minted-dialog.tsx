@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FetchTokenResult } from "@/types";
 import { useTheme } from "next-themes";
-import { useRef } from "react";
+import { useState } from "react";
 
 const preWrittenPostXSlug = "http://twitter.com/intent/tweet?text=";
 const preWrittenPostHeyLensSlug = "https://lenster.xyz/?text=";
@@ -50,7 +50,7 @@ export function MintedDialog({
 }: MintedDialogProps) {
   const { theme, systemTheme } = useTheme();
 
-  const baseMessage = useRef(
+  const [baseMessage] = useState(
     "I%27ve+just+minted+" +
       mintPerUserPerYear +
       "+%24" +
@@ -94,15 +94,13 @@ export function MintedDialog({
           <PopoverContent className="w-fit">
             <div className="flex flex-row items-center gap-4">
               <a
-                href={preWrittenPostXSlug + baseMessage.current + authorXHandle}
+                href={preWrittenPostXSlug + baseMessage + authorXHandle}
                 target="_blank">
                 <FaXTwitter className="text-black dark:text-white w-4 h-4 md:w-5 md:h-5 mr-1" />
               </a>
               <a
                 href={
-                  preWrittenPostHeyLensSlug +
-                  baseMessage.current +
-                  authorLensHandle
+                  preWrittenPostHeyLensSlug + baseMessage + authorLensHandle
                 }
                 target="_blank">
                 {theme == "dark" ||
@@ -123,7 +121,7 @@ export function MintedDialog({
               <a
                 href={
                   preWrittenPostFarcasterSlug +
-                  baseMessage.current +
+                  baseMessage +
                   authorFarcasterHandle
                 }
                 target="_blank">
