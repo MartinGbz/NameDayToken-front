@@ -19,6 +19,7 @@ import { TokenStats } from "./token-stats/token-stats";
 import { Mint } from "./mint/mint";
 
 import { nameDayTokenABI } from "@/namedaytoken-abi";
+import { Skeleton } from "../ui/skeleton";
 
 interface DashboardProps {
   tokenAddress: Address;
@@ -30,7 +31,7 @@ export const Dashboard = ({ tokenAddress }: DashboardProps) => {
   const {
     data: tokenBalanceData,
     isError,
-    isLoading,
+    isLoading: isTokenBalanceDataLoading,
     refetch: refetchBalance,
   } = useBalance({
     address: address,
@@ -39,8 +40,8 @@ export const Dashboard = ({ tokenAddress }: DashboardProps) => {
 
   const {
     data: tokenData,
-    isError: isTokenError,
-    isLoading: isTokenLoading,
+    isError: isTokenDataError,
+    isLoading: isTokenDataLoading,
     refetch: refetchTokenData,
   } = useToken({
     address: tokenAddress,
@@ -81,23 +82,28 @@ export const Dashboard = ({ tokenAddress }: DashboardProps) => {
 
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
-      {tokenBalanceData && (
-        <Card>
-          <CardHeader>
-            <CardTitle>My Profile</CardTitle>
-            <CardDescription>Your profile infos</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="font-medium md:text-lg">
-              <span>My Balance: </span>
-              <span className="text-green-500">
-                {tokenBalanceData.formatted.substring(0, 6)}
-              </span>
-              <span>{" $" + tokenBalanceData.symbol}</span>
+      <Card>
+        <CardHeader>
+          <CardTitle>My Profile</CardTitle>
+          <CardDescription>Your profile infos</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {!isTokenBalanceDataLoading && tokenBalanceData && (
+            <div className="font-medium md:text-lg flex flex-row items-center">
+              <span className="mr-1">My Balance: </span>
+
+              <div>
+                <span className="text-green-500">
+                  {tokenBalanceData.formatted.substring(0, 6)}
+                </span>
+                <span>{" $" + tokenBalanceData.symbol}</span>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
+          )}
+          {isTokenBalanceDataLoading && <Skeleton className="h-6 w-60" />}
+        </CardContent>
+      </Card>
+
       {address && nameDayTokenData && tokenData && (
         <Mint
           address={address}
@@ -121,12 +127,12 @@ export const Dashboard = ({ tokenAddress }: DashboardProps) => {
           <CardDescription>Token stats</CardDescription>
         </CardHeader>
         <CardContent>
-          {tokenData && nameDayTokenData && (
-            <TokenStats
-              tokenData={tokenData}
-              nameDayTokenData={nameDayTokenData}
-            />
-          )}
+          <TokenStats
+            tokenData={tokenData}
+            nameDayTokenData={nameDayTokenData}
+            isNameDayTokenDataLoading={nameDayTokenLoading}
+            isTokenDataLoading={isTokenDataLoading}
+          />
         </CardContent>
       </Card>
     </div>
