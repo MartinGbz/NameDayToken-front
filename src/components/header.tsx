@@ -18,9 +18,11 @@ import {
 } from "./ui/dialog";
 import { useState } from "react";
 import { TokenForm } from "./token-form";
+import { useAccount } from "wagmi";
 
 const Header = () => {
   const router = useRouter();
+  const { isConnected } = useAccount();
   const { confetti } = useConfetti({
     emojis: ["🥳"],
   });
@@ -65,27 +67,25 @@ const Header = () => {
             router.push("/token/" + v);
           }}
         />
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-1 h-5 w-5" />
-              Create a token
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Deploy token</DialogTitle>
-              <DialogDescription>
-                Deploy your own NameDayToken
-              </DialogDescription>
-            </DialogHeader>
-            <TokenForm />
-          </DialogContent>
-        </Dialog>
-        {/* <Button>
-          <Plus className="mr-1 h-5 w-5" />
-          Create a token
-        </Button> */}
+        {isConnected && (
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-1 h-5 w-5" />
+                Create a token
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Deploy token</DialogTitle>
+                <DialogDescription>
+                  Deploy your own NameDayToken
+                </DialogDescription>
+              </DialogHeader>
+              <TokenForm />
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </div>
   );
