@@ -1,6 +1,17 @@
 import { Address } from "wagmi";
+import { z } from "zod";
 
-export type TokenOption = { value: Address; label: string };
+// export type TokenOption = { name: string; address: Address };
+// const AddressSchema = z.custom<Address>();
+
+// export type AddressZod = z.infer<typeof AddressSchema>;
+
+export const TokenOptionSchema = z.object({
+  name: z.string(),
+  address: z.custom<Address>(),
+});
+
+export type TokenOption = z.infer<typeof TokenOptionSchema>;
 
 export type TokenTimestamps = {
   previousNameDayTimestamp: bigint;

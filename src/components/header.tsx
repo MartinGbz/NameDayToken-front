@@ -19,6 +19,19 @@ import {
 import { useState } from "react";
 import { TokenForm } from "./token-form";
 import { useAccount } from "wagmi";
+import { TokenOption, TokenOptionSchema } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { z } from "zod";
+
+// import { getTokens } from "@/api/tokens";
+
+const getTokens = async () =>
+  fetch("/api/tokens")
+    .then((res) => res.json())
+    .then((res) => {
+      const tokens = z.array(TokenOptionSchema).parse(res);
+      return tokens;
+    });
 
 const Header = () => {
   const router = useRouter();
@@ -27,6 +40,12 @@ const Header = () => {
     emojis: ["🥳"],
   });
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["tokens"],
+    queryFn: getTokens,
+  });
+
   return (
     <div className="w-screen flex flex-col p-4 space-y-4">
       <div className="w-full flex flex-row justify-between">
@@ -61,12 +80,15 @@ const Header = () => {
         </div>
       </div>
       <div className="w-full flex flex-row space-x-4">
-        <TokensCombobox
-          defaultPlaceholder="Search a token..."
-          onChange={(v: Address | undefined) => {
-            router.push("/token/" + v);
-          }}
-        />
+        {data && (
+          <TokensCombobox
+            tokens={data}
+            defaultPlaceholder="Search a token..."
+            onChange={(v: Address | undefined) => {
+              router.push("/token/" + v);
+            }}
+          />
+        )}
         {isConnected && (
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
