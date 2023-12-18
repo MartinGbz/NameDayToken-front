@@ -81,7 +81,7 @@ export function TokensCombobox({
                     : `0x${currentValue}`;
                   setValue(
                     newValue.toLowerCase() === value?.toLowerCase()
-                      ? undefined
+                      ? newValue
                       : token.value
                   );
                   setOpen(false);
