@@ -2,29 +2,49 @@
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ThemeModeToggle } from "@/components/theme-mode-toggle";
+import { TokensCombobox } from "./tokens-combobox";
+import { Button } from "./ui/button";
+import { Address } from "viem";
+import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter();
   return (
-    <div className="w-screen flex flex-row justify-between p-4">
-      <div>
-        <span className="hidden md:inline font-bold text-4xl min-w-fit self-center mr-2">
-          NameDayToken
-        </span>
-        <span className="font-bold text-4xl min-w-fit self-center">🥳</span>
+    <div className="w-screen flex flex-col p-4 space-y-4">
+      <div className="w-full flex flex-row justify-between">
+        <div>
+          <span className="hidden md:inline font-bold text-4xl min-w-fit self-center mr-2">
+            NameDayToken
+          </span>
+          <span className="font-bold text-4xl min-w-fit self-center">🥳</span>
+        </div>
+        <div className="flex space-x-2 md:space-x-4">
+          <ConnectButton
+            label="Connect"
+            chainStatus={{
+              smallScreen: "icon",
+              largeScreen: "name",
+            }}
+            accountStatus={{
+              smallScreen: "avatar",
+              largeScreen: "full",
+            }}
+          />
+          <ThemeModeToggle />
+        </div>
       </div>
-      <div className="flex space-x-2 md:space-x-4">
-        <ConnectButton
-          label="Connect"
-          chainStatus={{
-            smallScreen: "icon",
-            largeScreen: "name",
-          }}
-          accountStatus={{
-            smallScreen: "avatar",
-            largeScreen: "full",
+      <div className="w-full flex flex-row space-x-4">
+        <TokensCombobox
+          defaultPlaceholder="Search a token..."
+          onChange={(v: Address | undefined) => {
+            router.push("/token/" + v);
           }}
         />
-        <ThemeModeToggle />
+        <Button>
+          <Plus className="mr-1 h-5 w-5" />
+          Create a token
+        </Button>
       </div>
     </div>
   );
