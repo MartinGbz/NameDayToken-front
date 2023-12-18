@@ -7,17 +7,28 @@ import { Button } from "./ui/button";
 import { Address } from "viem";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useConfetti } from "@/hooks/use-confetti";
 
 const Header = () => {
   const router = useRouter();
+  const { confetti } = useConfetti({
+    emojis: ["🥳"],
+  });
   return (
     <div className="w-screen flex flex-col p-4 space-y-4">
       <div className="w-full flex flex-row justify-between">
-        <div>
+        <div className="cursor-pointer" onClick={() => router.push("/")}>
           <span className="hidden md:inline font-bold text-4xl min-w-fit self-center mr-2">
             NameDayToken
           </span>
-          <span className="font-bold text-4xl min-w-fit self-center">🥳</span>
+          <span
+            className="font-bold text-4xl min-w-fit self-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              confetti();
+            }}>
+            🥳
+          </span>
         </div>
         <div className="flex space-x-2 md:space-x-4">
           <ConnectButton

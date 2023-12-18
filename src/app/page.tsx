@@ -1,3 +1,8 @@
+"use client";
+
+import { redirect } from "next/navigation";
+import tokensJSON from "@/tokens.json";
+
 export default function Home() {
-  return;
+  redirect("/token/" + tokensJSON[0].value);
 }

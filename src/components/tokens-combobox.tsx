@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -21,10 +21,11 @@ import { Address } from "wagmi";
 
 import tokensJSON from "@/tokens.json";
 import { TokenOption } from "@/types";
+import { useParams } from "next/navigation";
 
 interface ComboboxProps {
   defaultPlaceholder: string;
-  onChange?: (value: Address | undefined) => void;
+  onChange: (value: Address | undefined) => void;
 }
 
 const tokens: TokenOption[] = tokensJSON as TokenOption[];
@@ -33,13 +34,20 @@ export function TokensCombobox({
   defaultPlaceholder,
   onChange,
 }: ComboboxProps) {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<Address | undefined>(
-    tokens[0].value
+  const { id: tokenAddress } = useParams<{ id: Address }>();
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState<Address | undefined>(
+    tokenAddress ?? tokens[0].value
   );
 
-  React.useEffect(() => {
-    onChange?.(value);
+  useEffect(() => {
+    if (!tokenAddress) return;
+    setValue(tokenAddress);
+  }, [tokenAddress]);
+
+  useEffect(() => {
+    onChange(value);
   }, [onChange, value]);
 
   return (
