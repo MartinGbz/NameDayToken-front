@@ -8,12 +8,23 @@ import { Address } from "viem";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useConfetti } from "@/hooks/use-confetti";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { useState } from "react";
+import { TokenForm } from "./token-form";
 
 const Header = () => {
   const router = useRouter();
   const { confetti } = useConfetti({
     emojis: ["🥳"],
   });
+  const [dialogOpen, setDialogOpen] = useState(false);
   return (
     <div className="w-screen flex flex-col p-4 space-y-4">
       <div className="w-full flex flex-row justify-between">
@@ -54,10 +65,27 @@ const Header = () => {
             router.push("/token/" + v);
           }}
         />
-        <Button>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="mr-1 h-5 w-5" />
+              Create a token
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Deploy token</DialogTitle>
+              <DialogDescription>
+                Deploy your own NameDayToken
+              </DialogDescription>
+            </DialogHeader>
+            <TokenForm />
+          </DialogContent>
+        </Dialog>
+        {/* <Button>
           <Plus className="mr-1 h-5 w-5" />
           Create a token
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
