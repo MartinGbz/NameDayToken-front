@@ -1,9 +1,9 @@
 import { useRef, useEffect } from "react";
 import JSConfetti from "js-confetti";
 
-type ConfettiOptions = {
+interface ConfettiOptions {
   emojis?: string[] | undefined;
-};
+}
 
 export const useConfetti = (options: ConfettiOptions) => {
   const jsConfetti = useRef<JSConfetti>();

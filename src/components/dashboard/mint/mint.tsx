@@ -33,7 +33,7 @@ import { nameDayTokenABI } from "@/namedaytoken-abi";
 
 import { MintedDialog } from "./minted-dialog";
 
-import Confetti from "react-confetti";
+import { useConfetti } from "@/hooks/use-confetti";
 
 interface MintProps {
   address: Address;
@@ -50,9 +50,9 @@ export const Mint = ({
   nameDayTokenData,
   tokensMinted,
 }: MintProps) => {
+  const { confetti } = useConfetti({});
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMintedOpen, setDialogMintedOpen] = useState(false);
-  const [confettisRun, setConfettisRun] = useState<boolean>(false);
 
   const [ensName, setEnsName] = useState<EnsName>();
   const [ensNames, setEnsNames] = useState<EnsName[]>([]);
@@ -127,21 +127,15 @@ export const Mint = ({
         toast.success("Minted!");
         tokensMinted();
         setDialogMintedOpen(true);
-        setConfettisRun(true);
+        confetti();
       }
     },
   });
 
   useEffect(() => {
-    if (confettisRun) {
-      setTimeout(() => setConfettisRun(false), 2000);
-    }
-  }, [confettisRun]);
-
-  useEffect(() => {
     if (txBroadcasted?.hash) {
       setDialogOpen(false);
-      toast.loading(
+      toast.warning(
         <div className="flex flex-col space-y-1">
           <div>{"Minting..."}</div>
           {chain?.blockExplorers && (
@@ -171,18 +165,6 @@ export const Mint = ({
 
   return (
     <div className="relative flex items-center justify-center flex-col">
-      <Confetti
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-        initialVelocityY={100}
-        gravity={0.1}
-        numberOfPieces={confettisRun ? 500 : 0}
-      />
       {isDay && (
         <div className="absolute top-0 flex items-center space-x-1 p-1 border-2 border-red-400 rounded">
           <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse"></div>
