@@ -82,27 +82,29 @@ export const Dashboard = ({ tokenAddress }: DashboardProps) => {
 
   return (
     <div className="grid grid-cols-2 grid-row-2 gap-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>My Profile</CardTitle>
-          <CardDescription>Your profile infos</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {!isTokenBalanceDataLoading && tokenBalanceData && (
-            <div className="font-medium md:text-lg flex flex-row items-center">
-              <span className="mr-1">My Balance: </span>
-
-              <div>
-                <span className="text-green-500">
-                  {tokenBalanceData.formatted.substring(0, 6)}
-                </span>
-                <span>{" $" + tokenBalanceData.symbol}</span>
+      {((isTokenBalanceDataLoading && !tokenBalanceData) ||
+        (!isTokenBalanceDataLoading && tokenBalanceData)) && (
+        <Card>
+          <CardHeader>
+            <CardTitle>My Profile</CardTitle>
+            <CardDescription>Your profile infos</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {!isTokenBalanceDataLoading && tokenBalanceData && (
+              <div className="font-medium md:text-lg flex flex-row items-center">
+                <span className="mr-1">My Balance: </span>
+                <div>
+                  <span className="text-green-500">
+                    {tokenBalanceData.formatted.substring(0, 6)}
+                  </span>
+                  <span>{" $" + tokenBalanceData.symbol}</span>
+                </div>
               </div>
-            </div>
-          )}
-          {isTokenBalanceDataLoading && <Skeleton className="h-6 w-60" />}
-        </CardContent>
-      </Card>
+            )}
+            {isTokenBalanceDataLoading && <Skeleton className="h-6 w-60" />}
+          </CardContent>
+        </Card>
+      )}
 
       {address && nameDayTokenData && tokenData && (
         <Mint
