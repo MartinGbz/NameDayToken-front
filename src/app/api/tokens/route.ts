@@ -8,20 +8,11 @@ import { sepolia } from "viem/chains";
 const factoryAddress = "0x4fc76ac59824aCA8686Cfe70522cdcD7d790f2D1";
 
 const client = createPublicClient({
-  // chain: {
-  //   ...sepolia,
-  //   rpcUrls: {
-  //     ...sepolia.rpcUrls,
-  //     public: {
-  //       http: ["https://ethereum-sepolia.publicnode.com"],
-  //     },
-  //   },
-  // },
   chain: sepolia,
   transport: http(),
 });
 
-const getTokens = async () => {
+export const getTokens = async () => {
   const tokenCount = await client.readContract({
     address: factoryAddress,
     abi: factoryABI,
@@ -43,9 +34,6 @@ const getTokens = async () => {
     tokenAddresses.push(tokenAddress);
   }
 
-  console.log("tokenAddresses");
-  console.log(tokenAddresses);
-
   const tokens = await Promise.all(
     tokenAddresses.map(async (tokenAddress) => {
       const tokenName = await client.readContract({
@@ -62,8 +50,6 @@ const getTokens = async () => {
 
 export async function GET(): Promise<NextResponse> {
   const tokens = await getTokens();
-  console.log("tokens");
-  console.log(tokens);
   if (!tokens) {
     return NextResponse.json(
       { error: "error while fetching tokens" },

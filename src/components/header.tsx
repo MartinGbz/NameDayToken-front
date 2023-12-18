@@ -19,21 +19,15 @@ import {
 import { useState } from "react";
 import { TokenForm } from "./token-form";
 import { useAccount } from "wagmi";
-import { TokenOption, TokenOptionSchema } from "@/types";
-import { useQuery } from "@tanstack/react-query";
-import { z } from "zod";
+import { useTokens } from "@/hooks/use-tokens";
+import { Skeleton } from "./ui/skeleton";
+import { TokenOption } from "@/types";
 
-// import { getTokens } from "@/api/tokens";
+interface HeaderProps {
+  tokens: TokenOption[];
+}
 
-const getTokens = async () =>
-  fetch("/api/tokens")
-    .then((res) => res.json())
-    .then((res) => {
-      const tokens = z.array(TokenOptionSchema).parse(res);
-      return tokens;
-    });
-
-const Header = () => {
+const Header = ({ tokens }: HeaderProps) => {
   const router = useRouter();
   const { isConnected } = useAccount();
   const { confetti } = useConfetti({
@@ -41,10 +35,7 @@ const Header = () => {
   });
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["tokens"],
-    queryFn: getTokens,
-  });
+  // const { data: tokens, isLoading: isFetchingTokens, error } = useTokens();
 
   return (
     <div className="w-screen flex flex-col p-4 space-y-4">
@@ -80,15 +71,18 @@ const Header = () => {
         </div>
       </div>
       <div className="w-full flex flex-row space-x-4">
-        {data && (
+        {tokens && tokens.length > 0 && (
           <TokensCombobox
-            tokens={data}
+            tokens={tokens}
             defaultPlaceholder="Search a token..."
             onChange={(v: Address | undefined) => {
               router.push("/token/" + v);
             }}
           />
         )}
+        {/* {!tokens && isFetchingTokens && (
+          <Skeleton className="w-[200px] h-[40px]" />
+        )} */}
         {isConnected && (
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>

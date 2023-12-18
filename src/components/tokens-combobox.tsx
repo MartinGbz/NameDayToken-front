@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/popover";
 import { Address } from "wagmi";
 
-// import tokensJSON from "@/tokens.json";
 import { TokenOption } from "@/types";
 import { useParams } from "next/navigation";
 
@@ -29,15 +28,11 @@ interface ComboboxProps {
   onChange: (value: Address | undefined) => void;
 }
 
-// const tokens: TokenOption[] = tokensJSON as TokenOption[];
-// const tokens: TokenOption[] = await fetch("/api/tokens");
-
 export function TokensCombobox({
   tokens,
   defaultPlaceholder,
   onChange,
 }: ComboboxProps) {
-  console.log(tokens);
   const { id: tokenAddress } = useParams<{ id: Address }>();
 
   const [open, setOpen] = useState(false);
