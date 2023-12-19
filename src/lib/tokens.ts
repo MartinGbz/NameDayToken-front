@@ -10,39 +10,15 @@ const client = createPublicClient({
   transport: http(),
 });
 
-const retry = async (
-  fn: Function,
-  retriesLeft: number,
-  interval: number
-): Promise<any> => {
-  try {
-    return await fn();
-  } catch (error: any) {
-    if (retriesLeft) {
-      console.log(`Retrying in ${interval}ms... Retyrs left: ${retriesLeft}`);
-      await new Promise((resolve) => setTimeout(resolve, interval));
-      return retry(fn, retriesLeft - 1, interval);
-    } else {
-      throw new Error(error);
-    }
-  }
-};
-
-const getTokenCount = async () => {
+export const getTokens = async () => {
   const tokenCount = await client.readContract({
     address: factoryAddress,
     abi: factoryABI,
     functionName: "tokenCount",
+    blockTag: "pending",
   });
-  if (!tokenCount || tokenCount === BigInt(0)) {
-    // sometimes it doesn't get the right count so we throw an error to retry
-    throw new Error("error while fetching token count");
-  }
-  return tokenCount;
-};
 
-export const getTokens = async () => {
-  const tokenCount = await retry(getTokenCount, 3, 0);
+  console.log(tokenCount);
 
   const tokenAddresses = new Array<Address>();
 

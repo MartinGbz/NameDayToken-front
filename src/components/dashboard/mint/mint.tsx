@@ -128,6 +128,7 @@ export const Mint = ({
         tokensMinted();
         setDialogMintedOpen(true);
         confetti();
+        hasMintedRefetch();
       }
     },
   });
