@@ -21,7 +21,7 @@ const formSchema = z.object({
     .min(3, {
       message: "Symbol must be at least 3 characters.",
     })
-    .max(4, {
+    .max(10, {
       message: "Symbol must be at most 4 characters.",
     }),
 
@@ -100,8 +100,8 @@ export const TokenForm = () => {
             values.symbol,
             values.dayName,
             BigInt(values.nameDayTimestamp),
-            BigInt(values.mintPerUserPerYear),
-            BigInt(values.maxSupply),
+            BigInt(values.mintPerUserPerYear) * BigInt(10 ** 18),
+            BigInt(values.maxSupply) * BigInt(10 ** 18),
           ],
         });
       }}>
