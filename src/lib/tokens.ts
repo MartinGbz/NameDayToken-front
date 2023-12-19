@@ -1,9 +1,8 @@
+import { factoryAddress } from "@/config";
 import { factoryABI } from "@/factory-abi";
 import { nameDayTokenABI } from "@/namedaytoken-abi";
 import { Address, createPublicClient, http } from "viem";
 import { sepolia } from "viem/chains";
-
-const factoryAddress = "0x4fc76ac59824aCA8686Cfe70522cdcD7d790f2D1";
 
 const client = createPublicClient({
   chain: sepolia,

@@ -1,5 +1,8 @@
 "use client";
 import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
+import { factoryAddress } from "@/config";
+import { factoryABI } from "@/factory-abi";
+import { useContractWrite, useNetwork } from "wagmi";
 import * as z from "zod";
 
 const formSchema = z.object({
@@ -33,11 +36,22 @@ const formSchema = z.object({
   nameDayTimestamp: z.coerce.number({
     required_error: "Name Day Timestamp is required.",
   }),
-  mintPerUserPerYear: z.coerce.number().default(100).optional(),
-  maxSupply: z.coerce.number().default(1000000).optional(),
+  mintPerUserPerYear: z.coerce.number().default(100),
+  maxSupply: z.coerce.number().default(1000000),
 });
 
 export const TokenForm = () => {
+  const { chain, chains } = useNetwork();
+  const {
+    data: txBroadcasted,
+    write,
+    error: writeError,
+  } = useContractWrite({
+    address: factoryAddress,
+    abi: factoryABI,
+    functionName: "deployToken",
+    chainId: chains.find((c) => c.id === chain?.id)?.id ?? chains[0].id,
+  });
   return (
     <AutoForm
       formSchema={formSchema}
@@ -80,8 +94,16 @@ export const TokenForm = () => {
         },
       }}
       onSubmit={(values) => {
-        console.log("submitted");
-        console.log(values);
+        write({
+          args: [
+            values.name,
+            values.symbol,
+            values.dayName,
+            BigInt(values.nameDayTimestamp),
+            BigInt(values.mintPerUserPerYear),
+            BigInt(values.maxSupply),
+          ],
+        });
       }}>
       <AutoFormSubmit>Deploy token</AutoFormSubmit>
     </AutoForm>
