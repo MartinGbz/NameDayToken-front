@@ -20,12 +20,12 @@ import {
 import { Address } from "wagmi";
 
 import { TokenOption } from "@/types";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 interface ComboboxProps {
   tokens: TokenOption[];
   defaultPlaceholder: string;
-  onChange: (value: Address | undefined) => void;
+  onChange?: (value: Address | undefined) => void;
 }
 
 export function TokensCombobox({
@@ -33,6 +33,7 @@ export function TokensCombobox({
   defaultPlaceholder,
   onChange,
 }: ComboboxProps) {
+  const router = useRouter();
   const { id: tokenAddress } = useParams<{ id: Address }>();
 
   const [open, setOpen] = useState(false);
@@ -40,14 +41,20 @@ export function TokensCombobox({
     tokenAddress ?? tokens[0].address
   );
 
+  // update the combobox value when the tokenAddress url changes
   useEffect(() => {
     if (!tokenAddress) return;
     setValue(tokenAddress);
   }, [tokenAddress]);
 
+  // allow the redirection to the token page:
+  // - when the user selects a token from the combobox
+  // - when the user selects a token from the url
+  // - when the user is on the home page, the redirection will be on the first token
   useEffect(() => {
-    onChange(value);
-  }, [onChange, value]);
+    onChange?.(value);
+    router.push(`/token/${value}`);
+  }, [onChange, router, value]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
