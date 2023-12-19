@@ -1,11 +1,6 @@
 import { Address } from "wagmi";
 import { z } from "zod";
 
-// export type TokenOption = { name: string; address: Address };
-// const AddressSchema = z.custom<Address>();
-
-// export type AddressZod = z.infer<typeof AddressSchema>;
-
 export const TokenOptionSchema = z.object({
   name: z.string(),
   address: z.custom<Address>(),

@@ -18,8 +18,6 @@ export const getTokens = async () => {
     blockTag: "pending",
   });
 
-  console.log(tokenCount);
-
   const tokenAddresses = new Array<Address>();
 
   for (let i = 0; i < Number(tokenCount); i++) {

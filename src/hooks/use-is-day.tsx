@@ -1,6 +1,6 @@
 "use client";
 
-import { getPreviousAndNextTimestamp } from "@/utils/timestamps";
+import { getPreviousAndNextTimestamp } from "@/lib/timestamps";
 import { useEffect, useState } from "react";
 
 export const useIsDay = (

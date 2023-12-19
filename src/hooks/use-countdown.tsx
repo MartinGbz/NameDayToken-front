@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { TokenTimestamps } from "@/types";
-import { getPreviousAndNextTimestamp } from "@/utils/timestamps";
+import { getPreviousAndNextTimestamp } from "@/lib/timestamps";
 
 const secondsInDay = 86400;
 
