@@ -42,10 +42,7 @@ const getTokenCount = async () => {
 };
 
 export const getTokens = async () => {
-  const tokenCount = await retry(getTokenCount, 3, 50);
-
-  console.log("tokenCount");
-  console.log(tokenCount);
+  const tokenCount = await retry(getTokenCount, 3, 0);
 
   const tokenAddresses = new Array<Address>();
 
@@ -70,30 +67,5 @@ export const getTokens = async () => {
     })
   );
 
-  console.log("BEFORE");
-
-  // sleep for 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-
-  console.log("AFTER");
-
   return tokens;
-};
-
-// We assume that there is at least one token created by the factory
-export const getDefaultTokenAddress = async () => {
-  const tokenAddress = await client.readContract({
-    address: factoryAddress,
-    abi: factoryABI,
-    functionName: "tokens",
-    args: [BigInt(0)],
-  });
-  console.log("BEFORE");
-
-  // sleep for 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-
-  console.log("AFTER");
-
-  return tokenAddress;
 };
