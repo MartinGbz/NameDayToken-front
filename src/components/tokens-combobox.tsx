@@ -53,7 +53,6 @@ export function TokensCombobox({
   // - when the user is on the home page, the redirection will be on the first token
   useEffect(() => {
     onChange?.(value);
-    console.log("router puuuuush");
     router.push(`/token/${value}`);
   }, [onChange, router, value]);
 

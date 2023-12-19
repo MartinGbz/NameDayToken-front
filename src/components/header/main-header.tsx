@@ -13,16 +13,13 @@ export const MainHeader = () => {
 
   return (
     <div className="w-full flex flex-row justify-between">
-      <div
-        className="cursor-pointer select-none"
-        onClick={() => router.push("/")}>
+      <div className="select-none">
         <span className="hidden md:inline font-bold text-4xl min-w-fit self-center mr-2">
           NameDayToken
         </span>
         <span
-          className="font-bold text-4xl min-w-fit self-center"
+          className="cursor-pointer font-bold text-4xl min-w-fit self-center"
           onClick={(e) => {
-            e.stopPropagation();
             confetti();
           }}>
           🥳
