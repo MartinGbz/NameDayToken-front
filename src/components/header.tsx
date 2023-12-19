@@ -19,8 +19,6 @@ import {
 import { useState } from "react";
 import { TokenForm } from "./token-form";
 import { useAccount } from "wagmi";
-import { useTokens } from "@/hooks/use-tokens";
-import { Skeleton } from "./ui/skeleton";
 import { TokenOption } from "@/types";
 
 interface HeaderProps {
@@ -34,8 +32,6 @@ const Header = ({ tokens }: HeaderProps) => {
     emojis: ["🥳"],
   });
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  // const { data: tokens, isLoading: isFetchingTokens, error } = useTokens();
 
   return (
     <div className="w-screen flex flex-col p-4 space-y-4">
@@ -80,9 +76,6 @@ const Header = ({ tokens }: HeaderProps) => {
             }}
           />
         )}
-        {/* {!tokens && isFetchingTokens && (
-          <Skeleton className="w-[200px] h-[40px]" />
-        )} */}
         {isConnected && (
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>

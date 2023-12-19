@@ -5,7 +5,7 @@ import Header from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Providers } from "./providers/providers";
 import { Toaster } from "sonner";
-import { getTokens } from "./api/tokens/route";
+import { getTokens } from "@/lib/tokens";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,16 +40,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const tokens = await getTokens();
-  console.log("$$$ tokens");
+  console.log("=====> tokens");
   console.log(tokens);
-  console.log("$$$ tokens");
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
           <div className="h-screen w-screen flex flex-col justify-between text-black dark:text-white">
             {tokens && <Header tokens={tokens} />}
-            {children}
+            <main className="h-full w-full pr-4 pl-4 p-b-4">{children}</main>
             <Footer />
           </div>
           <Toaster richColors />
