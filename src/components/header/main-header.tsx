@@ -2,11 +2,9 @@
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ThemeModeToggle } from "@/components/theme-mode-toggle";
-import { useRouter } from "next/navigation";
 import { useConfetti } from "@/hooks/use-confetti";
 
 export const MainHeader = () => {
-  const router = useRouter();
   const { confetti } = useConfetti({
     emojis: ["🥳"],
   });

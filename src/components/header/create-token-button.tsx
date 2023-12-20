@@ -50,9 +50,7 @@ export const CreateTokenButton = () => {
   const { data, isError, isLoading } = useWaitForTransaction({
     hash: txBroadcasted?.hash,
     onSuccess(data) {
-      console.log(data);
       if (data.status == "success") {
-        console.log("success");
         toast.success("Token deployed!");
         router.refresh();
         setFormData({});

@@ -1,13 +1,7 @@
 "use client";
+
 import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
-import { factoryAddress } from "@/config";
-import { factoryABI } from "@/factory-abi";
-import { ExternalLink } from "lucide-react";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
 
 export const formSchema = z.object({
   name: z
@@ -98,16 +92,6 @@ export const TokenForm = ({
       }}
       onSubmit={(values) => {
         onSubmit?.(values);
-        // write({
-        //   args: [
-        //     values.name,
-        //     values.symbol,
-        //     values.dayName,
-        //     BigInt(values.nameDayTimestamp),
-        //     BigInt(values.mintPerUserPerYear) * BigInt(10 ** 18),
-        //     BigInt(values.maxSupply) * BigInt(10 ** 18),
-        //   ],
-        // });
       }}
       onValuesChange={(values) => {
         formDataChanged?.(values);
