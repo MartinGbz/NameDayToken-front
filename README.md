@@ -8,7 +8,13 @@
 
 # Abstract
 
-The NameDayToken is an ERC-20 contract mintable by addresses with specific ENS names and transferable only during the specific name day.
+This repo is a frontend that allows users to **mint** and **deploy** [NameDayTokens](#namedaytokens).
+
+➡️ Live on https://name-day-token.vercel.app/
+
+# NameDayTokens
+
+NameDayTokens are ERC-20 mintable by addresses with specific ENS names and transferable only during the specific name day.
 
 Example: You setup an Alice token that is mintable by all \*alice\*.eth holders and only transferable during Alice's day (16/12 of each year).
 
