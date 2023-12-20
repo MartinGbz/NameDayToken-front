@@ -136,7 +136,7 @@ export const Mint = ({
   useEffect(() => {
     if (txBroadcasted?.hash) {
       setDialogOpen(false);
-      toast.warning(
+      toast.loading(
         <div className="flex flex-col space-y-1">
           <div>{"Minting..."}</div>
           {chain?.blockExplorers && (

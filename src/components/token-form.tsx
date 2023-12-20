@@ -2,10 +2,14 @@
 import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
 import { factoryAddress } from "@/config";
 import { factoryABI } from "@/factory-abi";
-import { useContractWrite, useNetwork } from "wagmi";
+import { ExternalLink } from "lucide-react";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 
-const formSchema = z.object({
+export const formSchema = z.object({
   name: z
     .string({
       required_error: "name is required.",
@@ -40,18 +44,17 @@ const formSchema = z.object({
   maxSupply: z.coerce.number().default(1000000),
 });
 
-export const TokenForm = () => {
-  const { chain, chains } = useNetwork();
-  const {
-    data: txBroadcasted,
-    write,
-    error: writeError,
-  } = useContractWrite({
-    address: factoryAddress,
-    abi: factoryABI,
-    functionName: "deployToken",
-    chainId: chains.find((c) => c.id === chain?.id)?.id ?? chains[0].id,
-  });
+interface TokenFormProps {
+  baseData?: Partial<z.infer<typeof formSchema>>;
+  formDataChanged?: (data: Partial<z.infer<typeof formSchema>>) => void;
+  onSubmit?: (data: z.infer<typeof formSchema>) => void;
+}
+
+export const TokenForm = ({
+  formDataChanged,
+  baseData,
+  onSubmit,
+}: TokenFormProps) => {
   return (
     <AutoForm
       formSchema={formSchema}
@@ -63,7 +66,7 @@ export const TokenForm = () => {
         },
         symbol: {
           inputProps: {
-            placeholder: "$ALICE",
+            placeholder: "ALICE",
           },
         },
         dayName: {
@@ -94,17 +97,22 @@ export const TokenForm = () => {
         },
       }}
       onSubmit={(values) => {
-        write({
-          args: [
-            values.name,
-            values.symbol,
-            values.dayName,
-            BigInt(values.nameDayTimestamp),
-            BigInt(values.mintPerUserPerYear) * BigInt(10 ** 18),
-            BigInt(values.maxSupply) * BigInt(10 ** 18),
-          ],
-        });
-      }}>
+        onSubmit?.(values);
+        // write({
+        //   args: [
+        //     values.name,
+        //     values.symbol,
+        //     values.dayName,
+        //     BigInt(values.nameDayTimestamp),
+        //     BigInt(values.mintPerUserPerYear) * BigInt(10 ** 18),
+        //     BigInt(values.maxSupply) * BigInt(10 ** 18),
+        //   ],
+        // });
+      }}
+      onValuesChange={(values) => {
+        formDataChanged?.(values);
+      }}
+      values={baseData}>
       <AutoFormSubmit>Deploy token</AutoFormSubmit>
     </AutoForm>
   );
