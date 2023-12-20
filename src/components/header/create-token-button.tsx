@@ -106,7 +106,7 @@ export const CreateTokenButton = () => {
                   values.name,
                   values.symbol,
                   values.dayName,
-                  BigInt(values.nameDayTimestamp),
+                  BigInt(values.nameDay.getTime() / 1000),
                   BigInt(values.mintPerUserPerYear) * BigInt(10 ** 18),
                   BigInt(values.maxSupply) * BigInt(10 ** 18),
                 ],

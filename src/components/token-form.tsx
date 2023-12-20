@@ -30,9 +30,8 @@ export const formSchema = z.object({
     .min(1, {
       message: "Username must be at least 1 characters.",
     }),
-
-  nameDayTimestamp: z.coerce.number({
-    required_error: "Name Day Timestamp is required.",
+  nameDay: z.date({
+    required_error: "Name Day is required.",
   }),
   mintPerUserPerYear: z.coerce.number().default(100),
   maxSupply: z.coerce.number().default(1000000),
@@ -69,11 +68,8 @@ export const TokenForm = ({
           },
           description: "The name that users ENS names should contains.",
         },
-        nameDayTimestamp: {
-          inputProps: {
-            placeholder: "1631026800",
-          },
-          description: "Timestamp of the name day.",
+        nameDay: {
+          description: "The name day.",
         },
         mintPerUserPerYear: {
           inputProps: {

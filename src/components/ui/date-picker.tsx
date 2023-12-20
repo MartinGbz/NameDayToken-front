@@ -20,7 +20,7 @@ export const DatePicker = forwardRef<
   }
 >(function DatePickerCmp({ date, setDate }, ref) {
   return (
-    <Popover>
+    <Popover modal={true}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
