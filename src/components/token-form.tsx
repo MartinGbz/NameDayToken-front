@@ -19,8 +19,8 @@ export const formSchema = z.object({
     .min(3, {
       message: "Symbol must be at least 3 characters.",
     })
-    .max(10, {
-      message: "Symbol must be at most 4 characters.",
+    .max(7, {
+      message: "Symbol must be at most 7 characters.",
     }),
 
   dayName: z
@@ -67,7 +67,7 @@ export const TokenForm = ({
           inputProps: {
             placeholder: "alice",
           },
-          description: "The name that users should have in their ENS.",
+          description: "The name that users ENS names should contains.",
         },
         nameDayTimestamp: {
           inputProps: {
@@ -80,14 +80,7 @@ export const TokenForm = ({
             placeholder: "100",
           },
           description:
-            "Number of token users can mint per year during the name day. (default: 100)",
-        },
-        maxSupply: {
-          inputProps: {
-            placeholder: "1000000",
-          },
-          description:
-            "Number of token users can mint per year during the name day. (default: 1M)",
+            "Number of token users can mint per year during the name day.",
         },
       }}
       onSubmit={(values) => {
