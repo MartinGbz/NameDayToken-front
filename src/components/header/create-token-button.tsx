@@ -13,6 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { TokenForm, formSchema } from "@/components/token-form";
 import {
+  sepolia,
   useAccount,
   useContractWrite,
   useNetwork,
@@ -20,7 +21,7 @@ import {
 } from "wagmi";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { factoryAddress } from "@/config";
+import { defaultChain, factoryAddress } from "@/config";
 import { factoryABI } from "@/factory-abi";
 import { toast } from "sonner";
 
@@ -44,7 +45,10 @@ export const CreateTokenButton = () => {
     address: factoryAddress,
     abi: factoryABI,
     functionName: "deployToken",
-    chainId: chains.find((c) => c.id === chain?.id)?.id ?? chains[0].id,
+    chainId:
+      chains.find((c) => c.id === chain?.id)?.id ??
+      (chains[0] && chains[0].id) ??
+      defaultChain.id,
   });
 
   const { data, isError, isLoading } = useWaitForTransaction({

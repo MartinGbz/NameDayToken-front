@@ -34,6 +34,7 @@ import { nameDayTokenABI } from "@/namedaytoken-abi";
 import { MintedDialog } from "./minted-dialog";
 
 import { useConfetti } from "@/hooks/use-confetti";
+import { defaultChain } from "@/config";
 
 interface MintProps {
   address: Address;
@@ -117,7 +118,10 @@ export const Mint = ({
     address: tokenAddress,
     abi: nameDayTokenABI,
     functionName: "mint",
-    chainId: chains.find((c) => c.id === chain?.id)?.id ?? chains[0].id,
+    chainId:
+      chains.find((c) => c.id === chain?.id)?.id ??
+      (chains[0] && chains[0].id) ??
+      defaultChain.id,
   });
 
   const { data, isError, isLoading } = useWaitForTransaction({
@@ -155,7 +159,9 @@ export const Mint = ({
     }
   }, [chain?.blockExplorers, txBroadcasted?.hash]);
 
-  const { switchNetwork } = useSwitchNetwork({ chainId: chains[0].id });
+  const { switchNetwork } = useSwitchNetwork({
+    chainId: chains[0] ? chains[0].id : defaultChain.id,
+  });
 
   useEffect(() => {
     if (writeError?.name === "ChainMismatchError") {
